@@ -1049,6 +1049,13 @@ body.dark .viewer::before{
       }
     }
 
+    /* ===== Mobile horizontal overflow guard ===== */
+    @media (max-width:720px){
+      html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+      .shell{max-width:100%;min-width:0}
+      .nav,.nav-inner,.nav-links,.projection-lab,.projection-stage,.projection-explainer,.fold-stage,.viewer-section{max-width:100%;min-width:0}
+      img,canvas,svg,video{max-width:100%}
+    }
 </style>
 </head>
 <body>
