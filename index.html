@@ -1148,6 +1148,50 @@ body.dark .viewer::before{
   .lab-3d-actions{width:100%}
   .lab-3d-actions .tour-btn{flex:1;min-width:0}
 }.projection-stage[data-q="1"] .point,.projection-stage[data-q="4"] .point{transform:translateZ(115px)}.projection-stage[data-q="2"] .point,.projection-stage[data-q="3"] .point{transform:translateZ(-45px)}.projection-stage[data-q="1"] .point::before,.projection-stage[data-q="4"] .point::before{content:"IN FRONT OF V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}.projection-stage[data-q="2"] .point::before,.projection-stage[data-q="3"] .point::before{content:"BEHIND V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}
+
+/* ===== Projection lab: clean foldable geometry + glossy interaction ===== */
+.projection-stage{
+  background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),transparent 42%),linear-gradient(145deg,#071017,#0a151c 55%,#071018);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 24px 70px rgba(0,0,0,.18);
+}
+.projection-space{transition:transform .12s linear;will-change:transform}
+.projection-space.is-dragging{transition:none!important}
+.projection-stage .plane{
+  box-shadow:inset 0 0 35px rgba(255,255,255,.025),0 0 22px rgba(80,190,255,.06);
+  backface-visibility:hidden;
+}
+.projection-stage .plane.hp{
+  transform:rotateX(90deg) translateZ(0);
+  transform-origin:50% 0%;
+}
+.projection-stage .plane.vp{
+  transform:translateZ(0);
+  transform-origin:50% 100%;
+}
+.projection-stage .plane.hp::after,
+.projection-stage .plane.vp::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(115deg,rgba(255,255,255,.08),transparent 28%,transparent 70%,rgba(255,255,255,.035));
+  pointer-events:none;
+}
+.projection-stage .plane-label{backface-visibility:hidden;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.projection-stage .xy{z-index:25;font-weight:800;text-shadow:0 0 12px rgba(255,255,255,.25)}
+.projection-stage .point{will-change:left,top,transform;transition:left .65s cubic-bezier(.22,1,.36,1),top .65s cubic-bezier(.22,1,.36,1)}
+.projection-stage .projector{opacity:.7;box-shadow:0 0 10px rgba(120,210,255,.25)}
+.projection-stage .view-marker{backface-visibility:hidden;transform:translateZ(18px);transition:left .5s cubic-bezier(.22,1,.36,1),top .5s cubic-bezier(.22,1,.36,1)}
+.projection-stage .quadrant{user-select:none;-webkit-user-select:none;pointer-events:none;backface-visibility:hidden}
+.projection-stage .observer{user-select:none;-webkit-user-select:none}
+.lab-3d-actions .tour-btn{
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.045));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 8px 22px rgba(0,0,0,.12);
+  transition:transform .3s cubic-bezier(.22,1,.36,1),background .3s ease,box-shadow .3s ease;
+}
+.lab-3d-actions .tour-btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 14px 30px rgba(0,0,0,.18)}
+@media(max-width:720px){
+  .projection-stage{touch-action:pan-y}
+}
 </style>
 </head>
 <body>
@@ -1831,7 +1875,7 @@ if(glowViewer){
 })();
 
 
-    /* 3D projection space: keep the plane system together so it can be rotated. */
+    /* ===== Smooth 3D projection space ===== */
     const projectionSpace=document.createElement('div');
     projectionSpace.className='projection-space';
     projectionSpace.id='projectionSpace';
@@ -1839,57 +1883,72 @@ if(glowViewer){
       const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer'));
       sceneNodes.forEach(el=>projectionSpace.appendChild(el));
       projectionStage.appendChild(projectionSpace);
-      let sceneDrag=false,lastSX=0,lastSY=0,rx=-12,ry=-28,scale=1;
-      const normalizeAngle=a=>((a%360)+360)%360;
-      const clampScale=v=>Math.max(.68,Math.min(1.55,v));
-      const applySceneRotation=()=>{
-        ry=normalizeAngle(ry);
-        rx=normalizeAngle(rx);
+
+      let sceneDrag=false,lastSX=0,lastSY=0,rx=-8,ry=-28,scale=1;
+      const clampScale=v=>Math.max(.7,Math.min(1.5,v));
+      const applyScene=()=>{
         projectionSpace.style.setProperty('--scene-rx',rx+'deg');
         projectionSpace.style.setProperty('--scene-ry',ry+'deg');
         projectionSpace.style.setProperty('--scene-scale',scale);
       };
       const resetProjection3D=()=>{
-        rx=-12;ry=-28;scale=1;
-        projectionSpace.classList.remove('is-dragging');
+        rx=-8;ry=-28;scale=1;
         projectionStage.classList.remove('dragging');
-        applySceneRotation();
+        projectionSpace.classList.remove('is-dragging');
+        applyScene();
       };
+
       projectionStage.addEventListener('pointerdown',e=>{
-        if(e.target.closest('.point,.view-marker,.observer,.projection-3d-note'))return;
+        if(e.target.closest('.point,.view-marker,.observer,.projection-3d-note,.q-btn,.tour-btn'))return;
+        if(e.pointerType==='touch' && touchPts.size>1)return;
         sceneDrag=true;lastSX=e.clientX;lastSY=e.clientY;
-        projectionSpace.classList.add('is-dragging');
         projectionStage.classList.add('dragging');
+        projectionSpace.classList.add('is-dragging');
         projectionStage.setPointerCapture(e.pointerId);
       });
       projectionStage.addEventListener('pointermove',e=>{
         if(!sceneDrag)return;
-        // Horizontal drag turns the scene clockwise/counter-clockwise; vertical drag tilts it.
-        ry+=(e.clientX-lastSX)*.55;
-        rx-=(e.clientY-lastSY)*.38;
+        ry+=(e.clientX-lastSX)*.42;
+        rx-=(e.clientY-lastSY)*.30;
         lastSX=e.clientX;lastSY=e.clientY;
-        applySceneRotation();
+        applyScene();
       });
       const stopSceneDrag=()=>{
         sceneDrag=false;
-        projectionSpace.classList.remove('is-dragging');
         projectionStage.classList.remove('dragging');
+        projectionSpace.classList.remove('is-dragging');
       };
       projectionStage.addEventListener('pointerup',stopSceneDrag);
       projectionStage.addEventListener('pointercancel',stopSceneDrag);
       projectionStage.addEventListener('lostpointercapture',stopSceneDrag);
+
       projectionStage.addEventListener('wheel',e=>{
         e.preventDefault();
-        scale=clampScale(scale-e.deltaY*.001);
-        applySceneRotation();
+        scale=clampScale(scale*Math.exp(-e.deltaY*.0012));
+        applyScene();
       },{passive:false});
-      let touchStartDistance=0;
+
+      const touchPts=new Map();
+      let pinchStart=0;
       projectionStage.addEventListener('pointerdown',e=>{
-        if(e.pointerType==='touch' && e.isPrimary===false) return;
+        if(e.pointerType!=='touch')return;
+        touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        if(touchPts.size===2){
+          sceneDrag=false;
+          pinchStart=Math.hypot(...(()=>{const a=[...touchPts.values()];return [a[0].x-a[1].x,a[0].y-a[1].y]})());
+        }
       });
       projectionStage.addEventListener('pointermove',e=>{
-        // Touch pinch zoom uses two active touch pointers tracked by the browser.
+        if(e.pointerType!=='touch'||!touchPts.has(e.pointerId)||touchPts.size!==2)return;
+        touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        const a=[...touchPts.values()];
+        const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+        if(pinchStart>0){scale=clampScale(scale*(d/pinchStart));pinchStart=d;applyScene();}
       });
+      const clearTouch=e=>{touchPts.delete(e.pointerId);if(touchPts.size<2)pinchStart=0};
+      projectionStage.addEventListener('pointerup',clearTouch);
+      projectionStage.addEventListener('pointercancel',clearTouch);
+
       const observerRotate=document.getElementById('observerRotate');
       const observerFront=document.querySelector('.observer-front');
       const observerTop=document.querySelector('.observer-top');
@@ -1911,29 +1970,7 @@ if(glowViewer){
           observerRotate.textContent='Observer: '+p.name;
         });
       }
-      // Pinch zoom for the projection scene.
-      const touchPts=new Map();
-      let pinchStart=0;
-      projectionStage.addEventListener('pointerdown',e=>{
-        if(e.pointerType==='touch'){
-          touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
-          if(touchPts.size===2){
-            const pts=[...touchPts.values()];
-            pinchStart=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
-            sceneDrag=false;
-          }
-        }
-      },{passive:true});
-      projectionStage.addEventListener('pointermove',e=>{
-        if(e.pointerType!=='touch'||!touchPts.has(e.pointerId)||touchPts.size!==2)return;
-        touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
-        const pts=[...touchPts.values()];
-        const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
-        if(pinchStart>0){scale=clampScale(scale*(d/pinchStart));pinchStart=d;applySceneRotation();}
-      },{passive:true});
-      const clearTouch=e=>{touchPts.delete(e.pointerId);if(touchPts.size<2)pinchStart=0};
-      projectionStage.addEventListener('pointerup',clearTouch);
-      projectionStage.addEventListener('pointercancel',clearTouch);
+
       const projectionReset3D=document.getElementById('projectionReset3D');
       if(projectionReset3D) projectionReset3D.addEventListener('click',resetProjection3D);
       resetProjection3D();
