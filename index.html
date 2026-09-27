@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="JNTUH R25 Engineering Drawing and Computer Aided Drafting study tool with interactive 3D solids, orthographic projection, sections, surface development and isometric visualization." />
-  <title>Form — JNTUH Engineering Graphics</title>
+  <meta name="description" content="Engineering Graphics study tool with interactive 3D solids, orthographic projection, sections, surface development and isometric visualization." />
+  <title>Engineering Graphics Learning Lab</title>
   <style>
     :root { --ink:#1d1d1f; --muted:#6e6e73; --blue:#0071e3; --blue-deep:#0062c4; --line:#d2d2d7; --wash:#f5f5f7; --dark:#050506; }
     * { box-sizing:border-box; }
@@ -588,19 +588,51 @@ body { text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased; }
   .viewer::after, .intro::after, .projection-lab::after, .fold-stage::after { animation:none !important; }
 }
 
-  </style>
+  /* ===== Theme switch ===== */
+.nav-actions{display:flex;align-items:center;gap:8px}
+.theme-toggle{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:var(--glass);color:var(--ink);font-size:11px;font-weight:650;cursor:pointer;box-shadow:0 5px 18px rgba(0,0,0,.05);transition:transform .35s var(--ease-smooth),background .35s ease,border-color .35s ease,color .35s ease;will-change:transform}
+.theme-toggle:hover{transform:translateY(-2px) scale(1.02)}
+.theme-icon{font-size:15px;line-height:1}
+.creator-watermark{position:fixed;z-index:12;right:14px;bottom:12px;pointer-events:none;padding:5px 9px;border:1px solid rgba(127,127,127,.16);border-radius:999px;color:rgba(90,90,96,.55);background:rgba(255,255,255,.36);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:9px;letter-spacing:.08em;text-transform:lowercase;transition:background .4s ease,color .4s ease}
+.watermark-footer{opacity:.55}
+body.dark{--ink:#f5f5f7;--muted:#a7a7ad;--line:#303036;--wash:#111114;background:#09090b;color:var(--ink)}
+body.dark .nav{background:rgba(12,12,15,.78);border-bottom-color:rgba(255,255,255,.09)}
+body.dark .nav.scrolled{background:rgba(12,12,15,.92);box-shadow:0 8px 30px rgba(0,0,0,.32);border-bottom-color:rgba(255,255,255,.11)}
+body.dark .nav-links{color:#c5c5ca}
+body.dark .brand-mark{background:#f5f5f7;color:#111114}
+body.dark .menu{color:var(--ink)}
+body.dark .syllabus,body.dark .model-detail,body.dark .learn{background:#0d0d10}
+body.dark .unit-card,body.dark .detail-tab,body.dark .detail-panel,body.dark .model-card{background:#151519;color:var(--ink);border-color:#303036}
+body.dark .unit-card.active{background:#121b25}
+body.dark .unit-card ul,body.dark .micro p{color:#b5b5bb}
+body.dark .jntuh-note{background:#151519;border-color:#303036}
+body.dark .jntuh-note b,body.dark .micro b{color:#f5f5f7}
+body.dark .micro{background:#111114;border-color:#303036}
+body.dark .detail-panel{box-shadow:0 18px 45px rgba(0,0,0,.28)}
+body.dark .exam-strip{background:#102131;color:#9bd5ff}
+body.dark .diagram{background:#111e28}
+body.dark .diagram-grid{background-image:linear-gradient(#243947 1px,transparent 1px),linear-gradient(90deg,#243947 1px,transparent 1px)}
+body.dark .callout{background:#181b20;color:#9bd5ff;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+body.dark .step{border-color:#303036}
+body.dark .intro-copy b{color:#f5f5f7}
+body.dark footer{border-color:#303036}
+body.dark .creator-watermark{color:rgba(235,235,240,.5);background:rgba(20,20,24,.5);border-color:rgba(255,255,255,.1)}
+body.dark .theme-toggle{color:#f5f5f7;border-color:#3a3a40}
+body.dark .nav-links.open{background:rgba(14,14,17,.97)}
+@media(max-width:720px){.theme-toggle{width:34px;padding:0;justify-content:center}.theme-text{display:none}.creator-watermark{right:9px;bottom:8px}}
+</style>
 </head>
 <body>
-  <header class="nav"><nav class="shell nav-inner"><a class="brand" href="#top"><span class="brand-mark"><span>+</span></span>Form</a><button class="menu" id="menuButton" aria-label="Open menu">☰</button><div class="nav-links" id="navLinks"><a href="#syllabus">JNTUH syllabus</a><a href="#explore">3D Lab</a><a href="#projection-lab">Projection Lab</a><a href="#projection-explainer">Learn FV / TV</a><a href="#details">Micro details</a><a href="#learn">Study method</a><a class="nav-button" href="#explore">Start exploring</a></div></nav></header>
+  <header class="nav"><nav class="shell nav-inner"><a class="brand" href="#top"><span class="brand-mark"><span>+</span></span>Form</a><div class="nav-actions"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><span class="theme-icon">☾</span><span class="theme-text">Dark</span></button><button class="menu" id="menuButton" aria-label="Open menu">☰</button></div><div class="nav-links" id="navLinks"><a href="#syllabus">JNTUH syllabus</a><a href="#explore">3D Lab</a><a href="#projection-lab">Projection Lab</a><a href="#projection-explainer">Learn FV / TV</a><a href="#details">Micro details</a><a href="#learn">Study method</a><a class="nav-button" href="#explore">Start exploring</a></div></nav></header>
   <main id="top">
-    <section class="shell intro"><p class="eyebrow">JNTUH R25 · ME203ES</p><h1>Engineering Graphics<br>you can actually see.</h1><p class="intro-copy">A visual study space for <b>JNTUH B.Tech</b> students. Rotate the solid, identify every geometric feature, then connect it to orthographic, sectional, development and isometric drawing.</p></section>
+    <section class="shell intro"><p class="eyebrow">ENGINEERING GRAPHICS · ME203ES</p><h1>Engineering Graphics<br>you can actually see.</h1><p class="intro-copy">A visual study space for <b>engineering students</b> students. Rotate the solid, identify every geometric feature, then connect it to orthographic, sectional, development and isometric drawing.</p></section>
 
     <section class="syllabus reveal" id="syllabus">
       <div class="shell">
         <div class="syllabus-head">
           <p class="section-kicker">Official course map</p>
-          <h2>JNTUH R25, broken into five drawing units.</h2>
-          <p>For the current JNTUH R25 CSE syllabus, Engineering Graphics is listed as <b>ME203ES: Engineering Drawing and Computer Aided Drafting</b>. The official syllabus groups the subject into five units.</p>
+          <h2>Five units, organized for visual learning.</h2>
+          <p>The course is organized into five units covering graphics fundamentals, projections, solids, surface development and isometric drawing.</p>
         </div>
         <div class="unit-grid">
           <article class="unit-card reveal delay-1"><span class="unit-no">UNIT I</span><h3>Introduction to Engineering Graphics</h3><p>Build the drawing language before projecting solids.</p><ul><li>Principles & significance</li><li>Geometrical constructions</li><li>Plain & diagonal scales</li><li>Conics + rectangular hyperbola</li><li>Cycloid, epicycloid, hypocycloid</li></ul></article>
@@ -609,8 +641,8 @@ body { text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased; }
           <article class="unit-card reveal delay-1"><span class="unit-no">UNIT IV</span><h3>Development of Surfaces</h3><p>Unfold a solid without changing its actual surface.</p><ul><li>Prism development</li><li>Cylinder development</li><li>Pyramid development</li><li>Cone development</li></ul></article>
           <article class="unit-card reveal delay-1"><span class="unit-no">UNIT V</span><h3>Isometric Projections</h3><p>Represent the object pictorially and reverse the process.</p><ul><li>Isometric principles & scale</li><li>Simple & compound solids</li><li>Non-isometric lines</li><li>Spherical parts</li><li>Isometric ↔ orthographic</li></ul></article>
         </div>
-        <div class="jntuh-note"><b>JNTUH note:</b> The R25 CSE syllabus specifies conventional drawing for the End Semester Examination and CIE-I, with CIE-II using computer. It also includes CAD treatment of orthographic views, solids/sections and isometric conversion.</div>
-        <p class="source-row">Source: <a href="https://jntuh.ac.in/uploads/academics/R25B.Tech.CSEIIIYearSyllabusV2.pdf" target="_blank" rel="noopener">JNTUH R25 B.Tech. CSE syllabus — ME203ES</a></p>
+        <div class="jntuh-note"><b>Course note:</b> The R25 CSE syllabus specifies conventional drawing for the End Semester Examination and CIE-I, with CIE-II using computer. It also includes CAD treatment of orthographic views, solids/sections and isometric conversion.</div>
+        
       </div>
     </section>
 
@@ -768,8 +800,9 @@ body { text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased; }
     <section class="learn reveal" id="learn"><div class="shell"><div class="learn-head"><h2>Explore first. Draw with confidence.</h2><p>This simple flow makes the jump from a 3D object to its Engineering Graphics construction much less mysterious.</p></div><div class="steps"><article class="step reveal delay-1"><span class="step-num">01</span><h3>Turn the solid</h3><p>Use your hands to rotate it. Notice the faces, corners and edges that appear or disappear.</p></article><article class="step reveal delay-1"><span class="step-num">02</span><h3>Switch the view</h3><p>Tap 2D to remove perspective. It helps you see the object as a technical projection, not a photograph.</p></article><article class="step reveal delay-1"><span class="step-num">03</span><h3>Trace the logic</h3><p>Use Wire mode to study every edge, then reproduce the visible and hidden lines in your notebook.</p></article></div></div></section>
     <section class="shell explain reveal" id="method"><div><p class="eyebrow">Projection thinking</p><h2>One object.<br><span class="blue">Several true views.</span></h2><p>Engineering Graphics is not about copying a shape. It is about placing that shape in relation to the horizontal and vertical planes, then communicating it precisely.</p></div><div class="diagram" aria-label="Simple illustration of horizontal and vertical projection planes"><div class="diagram-grid"></div><i class="axis axis-x"></i><i class="axis axis-y"></i><span class="axis-label label-x">X–Y reference</span><span class="axis-label label-h">H.P.</span><span class="axis-label label-v">V.P.</span><div class="mini-solid"><div></div><div></div><div></div></div><span class="callout callout-one">front view</span><span class="callout callout-two">top view</span></div></section>
     <section class="cta reveal"><div class="shell"><p class="eyebrow">Make every line intentional.</p><h2>Your next drawing starts with a better view.</h2><p>Choose a solid above, rotate it slowly, and sketch the face that is directly in front of you. Repeat from the top and side.</p><a class="button" href="#explore">Open the 3D viewer <span>→</span></a></div></section>
+  <div class="creator-watermark" aria-label="Created by notgonnasaythat">notgonnasaythat</div>
   </main>
-  <footer><div class="shell footer-inner"><p>Form — JNTUH R25 Engineering Graphics study prototype.</p><p>ME203ES: projection, solids, sections, development, isometric & CAD.</p></div></footer>
+  <footer><div class="shell footer-inner"><p>Form — Engineering Graphics study prototype.</p><p>Projection · solids · sections · development · isometric · CAD.</p><p class="watermark-footer">© notgonnasaythat</p></div></footer>
   <script>
     const canvas = document.getElementById('scene'), ctx = canvas.getContext('2d'), viewer = document.getElementById('viewer');
     const modelTitle = document.getElementById('modelTitle'), modelDescription = document.getElementById('modelDescription'), modelBadge = document.getElementById('modelBadge');
@@ -1106,6 +1139,23 @@ if(smoothViewer && !reduceMotion){
   requestAnimationFrame(tiltLoop);
 }
 
-  </script>
+  // ===== Light / dark mode =====
+const themeToggle=document.getElementById('themeToggle');
+const themeIcon=themeToggle?.querySelector('.theme-icon');
+const themeText=themeToggle?.querySelector('.theme-text');
+function applyTheme(mode){
+  const dark=mode==='dark';
+  document.body.classList.toggle('dark',dark);
+  if(themeIcon)themeIcon.textContent=dark?'☀':'☾';
+  if(themeText)themeText.textContent=dark?'Light':'Dark';
+  if(themeToggle)themeToggle.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
+  localStorage.setItem('eg-theme',mode);
+}
+const savedTheme=localStorage.getItem('eg-theme');
+const preferred=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+applyTheme(savedTheme||preferred);
+themeToggle?.addEventListener('click',()=>applyTheme(document.body.classList.contains('dark')?'light':'dark'));
+
+</script>
 </body>
 </html>
