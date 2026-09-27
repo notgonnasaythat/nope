@@ -1283,6 +1283,14 @@ body.dark .viewer::before{
     .feedback-submit:hover{transform:translateY(-2px);background:rgba(80,190,255,.12);border-color:rgba(100,210,255,.48);box-shadow:0 0 18px rgba(70,190,255,.15),0 12px 28px rgba(0,0,0,.25);}
     .feedback-status{min-height:17px;color:#75d9ff;font-size:11px;text-align:center;}
     @media(max-width:720px){.feedback-section{padding:62px 0}.feedback-wrap{grid-template-columns:1fr;gap:25px}.feedback-card{padding:18px}.feedback-row{grid-template-columns:1fr}}
+
+    /* Typing: smoky neon response */
+    .feedback-field{position:relative;}
+    .feedback-field::after{content:"";position:absolute;left:var(--typing-x,50%);top:var(--typing-y,50%);width:72px;height:72px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;opacity:0;background:radial-gradient(circle,rgba(95,220,255,.24),rgba(105,75,255,.10) 28%,transparent 70%);filter:blur(13px);transition:opacity .2s ease;}
+    .feedback-field.is-typing::after{opacity:1;animation:typingSmoke .7s ease-out forwards;}
+    .feedback-field.is-typing input,.feedback-field.is-typing textarea,.feedback-field.is-typing select{border-color:rgba(100,210,255,.38);box-shadow:0 0 0 2px rgba(70,190,255,.055),0 0 20px rgba(70,190,255,.10),inset 0 0 18px rgba(70,190,255,.025);}
+    .feedback-field input:focus,.feedback-field textarea:focus{color:#f7fdff;text-shadow:0 0 10px rgba(110,220,255,.16);}
+    @keyframes typingSmoke{0%{transform:translate(-50%,-50%) scale(.45);opacity:.7}55%{transform:translate(-50%,-54%) scale(1.15);opacity:.28}100%{transform:translate(-50%,-62%) scale(1.55);opacity:0}}
 </style>
 </head>
 <body>
@@ -2117,7 +2125,25 @@ if(glowViewer){
     setTimeout(()=>status.textContent='',3500);
   });
 })();
-</script>
+
+// ===== Typing neon response =====
+(function(){
+  const fields=document.querySelectorAll('#feedbackForm input,#feedbackForm textarea,#feedbackForm select');
+  fields.forEach(field=>{
+    const wrap=field.closest('.feedback-field');
+    if(!wrap)return;
+    field.addEventListener('input',()=>{
+      const r=field.getBoundingClientRect(),wr=wrap.getBoundingClientRect();
+      wrap.style.setProperty('--typing-x',((r.left+r.width*.5-wr.left)/wr.width*100)+'%');
+      wrap.style.setProperty('--typing-y',((r.top+r.height*.5-wr.top)/wr.height*100)+'%');
+      wrap.classList.remove('is-typing');
+      void wrap.offsetWidth;
+      wrap.classList.add('is-typing');
+    });
+    field.addEventListener('animationend',()=>wrap.classList.remove('is-typing'));
+    field.addEventListener('blur',()=>wrap.classList.remove('is-typing'));
+  });
+})();</script>
 </body>
 </html
 
