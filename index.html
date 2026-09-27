@@ -1192,6 +1192,43 @@ body.dark .viewer::before{
 @media(max-width:720px){
   .projection-stage{touch-action:pan-y}
 }
+
+/* ===== Projection quadrant: full-screen quarters + cursor-only gloss ===== */
+.projection-stage .quadrant{
+  width:50%;height:50%;min-height:0;padding:22px;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  color:rgba(255,255,255,.28);
+  background:rgba(255,255,255,.012);
+  border:0;
+  pointer-events:none;
+  transition:background .35s ease,color .35s ease;
+}
+.projection-stage .q1{right:0;top:0;text-align:left;align-items:flex-start}
+.projection-stage .q2{left:0;top:0;text-align:right;align-items:flex-end}
+.projection-stage .q3{left:0;bottom:0;text-align:right;align-items:flex-end;justify-content:flex-end}
+.projection-stage .q4{right:0;bottom:0;text-align:left;align-items:flex-start;justify-content:flex-end}
+.projection-stage .quadrant.active{color:#dff4ff;background:radial-gradient(circle at 50% 50%,rgba(61,177,255,.10),transparent 70%)}
+.projection-stage .quadrant strong{font-size:15px;letter-spacing:.04em}
+/* Keep educational labels readable while the 3D reference space rotates. */
+.projection-stage .quadrant{transform-style:flat;}
+/* Buttons stay clean until the pointer actually enters them. */
+.lab-3d-actions .tour-btn,.q-btn,.projection-reset-3d{
+  background:rgba(255,255,255,.045);
+  box-shadow:none;
+  transition:transform .28s cubic-bezier(.22,1,.36,1),background .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .lab-3d-actions .tour-btn:hover,.q-btn:hover,.projection-reset-3d:hover{
+    background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.055) 52%,rgba(120,210,255,.12));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 28px rgba(0,0,0,.16);
+    transform:translateY(-2px);
+  }
+}
+.q-btn.active{box-shadow:none}
+@media(max-width:720px){
+  .projection-stage .quadrant{padding:13px;font-size:8px}
+  .projection-stage .quadrant strong{font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -1621,22 +1658,23 @@ body.dark .viewer::before{
 
     const quadrantPointDrag=()=>{
       if(!projectionStage||!projectionPoint)return;
-      let dragging=false;
-      projectionPoint.addEventListener('pointerdown',e=>{
-        dragging=true; projectionPoint.setPointerCapture(e.pointerId);
-        projectionPoint.style.transition='none';
-      });
-      projectionPoint.addEventListener('pointermove',e=>{
-        if(!dragging)return;
-        const r=projectionStage.getBoundingClientRect();
-        let x=((e.clientX-r.left)/r.width)*100, y=((e.clientY-r.top)/r.height)*100;
-        x=Math.max(8,Math.min(92,x)); y=Math.max(10,Math.min(90,y));
+      let dragging=false,lastX=70,lastY=30;
+      const updatePoint=(x,y,animate=false)=>{
+        x=Math.max(4,Math.min(96,x)); y=Math.max(4,Math.min(96,y));
         const q=(y<50 ? (x>=50?1:2) : (x<50?3:4));
         currentQ=q;
         const d=qData[q];
-        document.querySelectorAll('.q-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.q)===q));
-        document.querySelectorAll('.quadrant').forEach(el=>el.classList.toggle('active',Number(el.dataset.q)===q));
+        projectionStage.dataset.q=String(q);
+        projectionPoint.style.transition=animate?'':'none';
         projectionPoint.style.left=x+'%'; projectionPoint.style.top=y+'%';
+        frontProjector.style.left=Math.min(x,50)+'%'; frontProjector.style.top=y+'%'; frontProjector.style.width=Math.abs(x-50)+'%';
+        topProjector.style.left=x+'%'; topProjector.style.top=Math.min(y,50)+'%'; topProjector.style.height=Math.abs(y-50)+'%';
+        const fvTop=d.fv==='above XY'?30:70, tvTop=d.tv==='below XY'?70:30;
+        frontMarker.style.left='calc(50% + 9px)'; frontMarker.style.top=fvTop+'%';
+        topMarker.style.left='calc('+x+'% + 9px)'; topMarker.style.top=tvTop+'%';
+        frontMarker.classList.add('visible'); topMarker.classList.add('visible');
+        document.querySelectorAll('.q-btn').forEach(btn=>btn.classList.toggle('active',Number(btn.dataset.q)===q));
+        document.querySelectorAll('.quadrant').forEach(el=>el.classList.toggle('active',Number(el.dataset.q)===q));
         document.getElementById('quadrantName').textContent=d.name;
         document.getElementById('quadrantDescription').textContent=d.desc;
         document.getElementById('hpRelation').textContent=d.hp;
@@ -1644,13 +1682,19 @@ body.dark .viewer::before{
         document.getElementById('viewSummary').textContent=`FV ${d.fvArrow} · TV ${d.tvArrow}`;
         document.getElementById('frontPos').textContent=d.fv;
         document.getElementById('topPos').textContent=d.tv;
-      });
-      const stop=()=>{
-        dragging=false; projectionPoint.style.transition='';
-        setQuadrant(currentQ);
       };
-      projectionPoint.addEventListener('pointerup',stop);
-      projectionPoint.addEventListener('pointercancel',stop);
+      projectionPoint.addEventListener('pointerdown',e=>{
+        dragging=true; lastX=parseFloat(projectionPoint.style.left)||70; lastY=parseFloat(projectionPoint.style.top)||30;
+        projectionPoint.setPointerCapture(e.pointerId); projectionPoint.style.transition='none'; e.stopPropagation();
+      });
+      projectionPoint.addEventListener('pointermove',e=>{
+        if(!dragging)return;
+        const r=projectionStage.getBoundingClientRect();
+        lastX=((e.clientX-r.left)/r.width)*100; lastY=((e.clientY-r.top)/r.height)*100;
+        updatePoint(lastX,lastY,false);
+      });
+      const stop=()=>{dragging=false;projectionPoint.style.transition='';};
+      projectionPoint.addEventListener('pointerup',stop); projectionPoint.addEventListener('pointercancel',stop);
     };
     quadrantPointDrag();
 
@@ -1880,7 +1924,7 @@ if(glowViewer){
     projectionSpace.className='projection-space';
     projectionSpace.id='projectionSpace';
     if(projectionStage){
-      const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer'));
+      const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer')&&!el.classList.contains('quadrant'));
       sceneNodes.forEach(el=>projectionSpace.appendChild(el));
       projectionStage.appendChild(projectionSpace);
 
