@@ -1581,11 +1581,15 @@ body.dark .viewer::before{
 
     document.getElementById('quadrantTour').addEventListener('click',()=>{
       const btn=document.getElementById('quadrantTour');
-      if(tourTimer){ clearInterval(tourTimer); tourTimer=null; btn.textContent='▶ Auto tour'; return; }
-      btn.textContent='■ Stop tour';
-      let q=currentQ;
-      setQuadrant(q);
-      tourTimer=setInterval(()=>{q=q===4?1:q+1;setQuadrant(q);},1800);
+      if(tourTimer){clearInterval(tourTimer);tourTimer=null;btn.textContent='▶ Auto tour';return;}
+      let q=1;
+      setQuadrant(1);
+      btn.textContent='■ Q1 → Q2 → Q3 → Q4';
+      tourTimer=setInterval(()=>{
+        q=q+1;
+        if(q>4)q=1;
+        setQuadrant(q);
+      },1800);
     });
 
     document.querySelectorAll('.challenge-option').forEach(btn=>btn.addEventListener('click',()=>{
