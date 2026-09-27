@@ -1124,17 +1124,22 @@ body.dark .viewer::before{
 .projection-stage .plane.hp{transform:rotateX(62deg) translateZ(-70px);transform-origin:50% 50%}.projection-stage .plane.vp{transform:translateZ(-70px)}.projection-stage{touch-action:none}
 .projection-3d-note{position:absolute;z-index:10;left:50%;top:6%;transform:translateX(-50%);padding:7px 11px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(7,10,13,.68);color:#b9dff2;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;pointer-events:none}@media(max-width:720px){.projection-3d-note{font-size:8px;top:3%;padding:6px 8px}}
 .projection-space{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transition:transform .18s ease-out;will-change:transform}
-.projection-stage{perspective:1500px;transform-style:preserve-3d;touch-action:pan-y;cursor:grab}
+.projection-stage{perspective:1500px;transform-style:preserve-3d;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;overscroll-behavior:contain}
+.projection-stage *{user-select:none;-webkit-user-select:none}
+.projection-space{transform:translateZ(0) rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg)) scale(var(--scene-scale,1));}
 .projection-stage.dragging{cursor:grabbing}
 .projection-space.is-dragging{transition:none!important}
 .observer{z-index:30}
 .observer svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 3px 7px rgba(0,0,0,.3))}
 .observer-front{left:1.8%;top:50%;transform:translateY(-50%)}
 .observer-top{left:50%;top:1.5%;transform:translateX(-50%)}
+.observer-side{right:1.8%;top:50%;transform:translateY(-50%)}
+.observer-back{right:1.8%;bottom:8%;transform:translateY(0)}
+#observerRotate{min-width:132px}
 .lab-3d-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
 .lab-reset-3d{opacity:.86}
 @media(max-width:720px){
-  .projection-stage{touch-action:pan-y;cursor:grab}
+  .projection-stage{touch-action:none;cursor:grab}
   .projection-stage.dragging{cursor:grabbing}
   .observer{font-size:7px}
   .observer svg{width:22px;height:22px}
@@ -1219,6 +1224,7 @@ body.dark .viewer::before{
           <div class="lab-3d-actions">
             <button class="tour-btn" id="quadrantTour">▶ Q1 → Q2 → Q3 → Q4</button>
             <button class="tour-btn lab-reset-3d" id="projectionReset3D" type="button">↺ Reset 3D</button>
+            <button class="tour-btn" id="observerRotate" type="button">Observer: Front</button>
           </div>
         </div>
 
@@ -1833,17 +1839,18 @@ if(glowViewer){
       const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer'));
       sceneNodes.forEach(el=>projectionSpace.appendChild(el));
       projectionStage.appendChild(projectionSpace);
-      let sceneDrag=false,lastSX=0,lastSY=0,rx=-12,ry=-28;
+      let sceneDrag=false,lastSX=0,lastSY=0,rx=-12,ry=-28,scale=1;
       const normalizeAngle=a=>((a%360)+360)%360;
+      const clampScale=v=>Math.max(.68,Math.min(1.55,v));
       const applySceneRotation=()=>{
-        // Yaw is fully 360°; pitch is allowed through a full turn without a hard ±24° clamp.
         ry=normalizeAngle(ry);
         rx=normalizeAngle(rx);
         projectionSpace.style.setProperty('--scene-rx',rx+'deg');
         projectionSpace.style.setProperty('--scene-ry',ry+'deg');
+        projectionSpace.style.setProperty('--scene-scale',scale);
       };
       const resetProjection3D=()=>{
-        rx=-12;ry=-28;
+        rx=-12;ry=-28;scale=1;
         projectionSpace.classList.remove('is-dragging');
         projectionStage.classList.remove('dragging');
         applySceneRotation();
@@ -1857,8 +1864,9 @@ if(glowViewer){
       });
       projectionStage.addEventListener('pointermove',e=>{
         if(!sceneDrag)return;
-        ry+=(e.clientX-lastSX)*.42;
-        rx-=(e.clientY-lastSY)*.30;
+        // Horizontal drag turns the scene clockwise/counter-clockwise; vertical drag tilts it.
+        ry+=(e.clientX-lastSX)*.55;
+        rx-=(e.clientY-lastSY)*.38;
         lastSX=e.clientX;lastSY=e.clientY;
         applySceneRotation();
       });
@@ -1870,6 +1878,62 @@ if(glowViewer){
       projectionStage.addEventListener('pointerup',stopSceneDrag);
       projectionStage.addEventListener('pointercancel',stopSceneDrag);
       projectionStage.addEventListener('lostpointercapture',stopSceneDrag);
+      projectionStage.addEventListener('wheel',e=>{
+        e.preventDefault();
+        scale=clampScale(scale-e.deltaY*.001);
+        applySceneRotation();
+      },{passive:false});
+      let touchStartDistance=0;
+      projectionStage.addEventListener('pointerdown',e=>{
+        if(e.pointerType==='touch' && e.isPrimary===false) return;
+      });
+      projectionStage.addEventListener('pointermove',e=>{
+        // Touch pinch zoom uses two active touch pointers tracked by the browser.
+      });
+      const observerRotate=document.getElementById('observerRotate');
+      const observerFront=document.querySelector('.observer-front');
+      const observerTop=document.querySelector('.observer-top');
+      const observerPositions=[
+        {name:'Front',cls:'observer-front',label:'FRONT OBSERVER'},
+        {name:'Top',cls:'observer-top',label:'TOP OBSERVER'},
+        {name:'Side',cls:'observer-side',label:'SIDE OBSERVER'},
+        {name:'Back',cls:'observer-back',label:'BACK OBSERVER'}
+      ];
+      let observerIndex=0;
+      if(observerRotate){
+        observerRotate.addEventListener('click',()=>{
+          observerIndex=(observerIndex+1)%observerPositions.length;
+          const p=observerPositions[observerIndex];
+          [observerFront,observerTop].forEach(el=>el.classList.remove('observer-front','observer-top','observer-side','observer-back'));
+          const el=observerIndex%2===0?observerFront:observerTop;
+          el.classList.add(p.cls);
+          el.querySelector('span').textContent=p.label;
+          observerRotate.textContent='Observer: '+p.name;
+        });
+      }
+      // Pinch zoom for the projection scene.
+      const touchPts=new Map();
+      let pinchStart=0;
+      projectionStage.addEventListener('pointerdown',e=>{
+        if(e.pointerType==='touch'){
+          touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+          if(touchPts.size===2){
+            const pts=[...touchPts.values()];
+            pinchStart=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+            sceneDrag=false;
+          }
+        }
+      },{passive:true});
+      projectionStage.addEventListener('pointermove',e=>{
+        if(e.pointerType!=='touch'||!touchPts.has(e.pointerId)||touchPts.size!==2)return;
+        touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        const pts=[...touchPts.values()];
+        const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+        if(pinchStart>0){scale=clampScale(scale*(d/pinchStart));pinchStart=d;applySceneRotation();}
+      },{passive:true});
+      const clearTouch=e=>{touchPts.delete(e.pointerId);if(touchPts.size<2)pinchStart=0};
+      projectionStage.addEventListener('pointerup',clearTouch);
+      projectionStage.addEventListener('pointercancel',clearTouch);
       const projectionReset3D=document.getElementById('projectionReset3D');
       if(projectionReset3D) projectionReset3D.addEventListener('click',resetProjection3D);
       resetProjection3D();
