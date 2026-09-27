@@ -712,7 +712,131 @@ body.dark .viewer::before{
 
 /* Keep the model itself steady; mouse interaction is the light, not a wave. */
 #scene{transform:none !important}
-</style>
+
+    /* ===== Dark mode: eliminate light-section leaks ===== */
+    body.dark,
+    body.dark main,
+    body.dark .learn,
+    body.dark .explain,
+    body.dark .syllabus,
+    body.dark .model-detail,
+    body.dark .cta,
+    body.dark footer {
+      background:#070709 !important;
+      color:#f4f4f5 !important;
+    }
+    body.dark .learn {
+      background:#0b0b0e !important;
+    }
+    body.dark .learn-head p,
+    body.dark .step p,
+    body.dark .explain p,
+    body.dark .syllabus-head p,
+    body.dark .detail-head p,
+    body.dark .detail-panel .lead,
+    body.dark .cta p,
+    body.dark .selector-label,
+    body.dark .jntuh-note,
+    body.dark .source-row,
+    body.dark .model-card small {
+      color:#a1a1aa !important;
+    }
+    body.dark .learn h2,
+    body.dark .explain h2,
+    body.dark .syllabus-head h2,
+    body.dark .detail-head h2,
+    body.dark .detail-panel h3,
+    body.dark .step h3,
+    body.dark .unit-card h3,
+    body.dark .cta h2 {
+      color:#f4f4f5 !important;
+    }
+    body.dark .steps,
+    body.dark .step,
+    body.dark .unit-grid,
+    body.dark .unit-card {
+      border-color:#29292f !important;
+    }
+    body.dark .unit-card,
+    body.dark .model-card,
+    body.dark .detail-tab,
+    body.dark .detail-panel,
+    body.dark .micro,
+    body.dark .jntuh-note,
+    body.dark .callout {
+      background:#111115 !important;
+      color:#f4f4f5 !important;
+      border-color:#29292f !important;
+    }
+    body.dark .unit-card.active {
+      background:#121a22 !important;
+    }
+    body.dark .micro p,
+    body.dark .unit-card ul {
+      color:#a1a1aa !important;
+    }
+    body.dark .exam-strip {
+      background:#0d1d29 !important;
+      color:#8ccfff !important;
+    }
+    body.dark .diagram {
+      background:#0c1821 !important;
+      box-shadow:0 20px 50px rgba(0,0,0,.35) !important;
+    }
+    body.dark .diagram-grid {
+      background-image:linear-gradient(#1b3445 1px,transparent 1px),linear-gradient(90deg,#1b3445 1px,transparent 1px) !important;
+    }
+    body.dark .axis {
+      background:#477b9d !important;
+    }
+    body.dark .axis-label {
+      color:#78a9c9 !important;
+    }
+    body.dark .callout {
+      color:#9edaff !important;
+      box-shadow:0 8px 18px rgba(0,0,0,.28) !important;
+    }
+    body.dark .nav,
+    body.dark .nav.scrolled {
+      background:rgba(10,10,13,.88) !important;
+      border-bottom-color:#29292f !important;
+      box-shadow:0 8px 30px rgba(0,0,0,.35) !important;
+    }
+    body.dark .nav-links {
+      color:#d4d4d8 !important;
+    }
+    body.dark .nav-links a:hover {
+      color:#5bc4ff !important;
+    }
+    body.dark .brand {
+      color:#f4f4f5 !important;
+    }
+    body.dark .brand-mark {
+      background:#f4f4f5 !important;
+      color:#070709 !important;
+    }
+    body.dark .menu {
+      color:#f4f4f5 !important;
+    }
+    body.dark .detail-tab.active,
+    body.dark .model-card.active {
+      border-color:#5bc4ff !important;
+      box-shadow:0 0 0 1px #5bc4ff !important;
+    }
+    body.dark .detail-tab:hover,
+    body.dark .micro:hover,
+    body.dark .model-card:hover,
+    body.dark .unit-card:hover {
+      box-shadow:0 14px 35px rgba(0,0,0,.35) !important;
+    }
+    @media (max-width:720px) {
+      body.dark .nav-links {
+        background:rgba(10,10,13,.98) !important;
+        border-bottom-color:#29292f !important;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <header class="nav"><nav class="shell nav-inner"><a class="brand" href="#top"><span class="brand-mark"><span>+</span></span>Engineering Graphics</a><div class="nav-actions"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><span class="theme-icon">☾</span><span class="theme-text">Dark</span></button><button class="menu" id="menuButton" aria-label="Open menu">☰</button></div><div class="nav-links" id="navLinks"><a href="#syllabus">Course syllabus</a><a href="#explore">3D Lab</a><a href="#projection-lab">Projection Lab</a><a href="#projection-explainer">Learn FV / TV</a><a href="#details">Micro details</a><a href="#learn">Study method</a><a class="nav-button" href="#explore">Start exploring</a></div></nav></header>
