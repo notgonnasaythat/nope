@@ -2078,3 +2078,6 @@ if(glowViewer){
     /* ===== Got an idea board ===== */
     (function(){const form=document.getElementById('ideaForm'),board=document.getElementById('ideaBoard');if(!form)return;form.addEventListener('submit',function(e){e.preventDefault();const data={name:document.getElementById('ideaName').value.trim(),type:document.getElementById('ideaType').value,message:document.getElementById('ideaMessage').value.trim(),time:Date.now()};if(!data.message)return;try{const old=JSON.parse(localStorage.getItem('eg-idea-board')||'[]');old.push(data);localStorage.setItem('eg-idea-board',JSON.stringify(old.slice(-30)));}catch(e){}form.reset();board.classList.add('sent');setTimeout(()=>board.classList.remove('sent'),3500);});})();
 >
+</script>
+</body>
+</html>
