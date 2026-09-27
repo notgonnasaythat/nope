@@ -1202,6 +1202,33 @@ if(glowViewer){
   }
   requestAnimationFrame(glowLoop);
 }
+// ===== Light / dark mode =====
+(function(){
+  const button=document.getElementById('themeToggle');
+  if(!button)return;
+  const icon=button.querySelector('.theme-icon');
+  const label=button.querySelector('.theme-text');
+
+  function setTheme(mode){
+    const dark=mode==='dark';
+    document.body.classList.toggle('dark',dark);
+    if(icon)icon.textContent=dark?'☀':'☾';
+    if(label)label.textContent=dark?'Light':'Dark';
+    button.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
+    button.setAttribute('title',dark?'Switch to light mode':'Switch to dark mode');
+    try{localStorage.setItem('eg-theme',mode)}catch(e){}
+  }
+
+  let saved=null;
+  try{saved=localStorage.getItem('eg-theme')}catch(e){}
+  const systemDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(saved || (systemDark?'dark':'light'));
+
+  button.addEventListener('click',function(){
+    setTheme(document.body.classList.contains('dark')?'light':'dark');
+  });
+})();
+
 </script>
 </body>
 </html>
