@@ -1237,13 +1237,6 @@ body.dark .viewer::before{
 .quadrant-full-btn{border:1px solid rgba(110,205,255,.20);border-radius:999px;padding:9px 14px;color:#cceeff;background:rgba(255,255,255,.035);box-shadow:0 0 0 rgba(80,190,255,0);transition:box-shadow .3s ease,background .3s ease,border-color .3s ease,transform .3s ease;}
 @media (hover:hover) and (pointer:fine){.quadrant-full-btn:hover,.q-btn:hover,.tour-btn:hover{background:rgba(90,190,255,.07);border-color:rgba(110,205,255,.38);box-shadow:0 0 16px rgba(70,190,255,.16),0 8px 24px rgba(0,0,0,.14),inset 0 0 12px rgba(90,200,255,.04);transform:translateY(-1px);}}
 
-
-
-
-/* ===== Got an idea board ===== */
-.idea-board{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:42px;max-width:1040px;margin:52px auto 0;padding:42px;border:1px solid rgba(255,255,255,.10);border-radius:30px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018));box-shadow:0 30px 90px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.07);overflow:hidden}.idea-board:before{content:"";position:absolute;width:360px;height:360px;left:-150px;top:-180px;background:radial-gradient(circle,rgba(75,190,255,.15),transparent 68%);pointer-events:none}.idea-copy,.idea-form{position:relative}.idea-eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.45}.idea-copy h3{margin:10px 0 12px;font-size:clamp(28px,4vw,42px);line-height:1.02;letter-spacing:-.045em}.idea-copy p{max-width:410px;margin:0;color:rgba(255,255,255,.55);font-size:14px;line-height:1.7}.idea-note{margin-top:24px;font-size:12px;opacity:.36}.idea-form{padding:22px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(0,0,0,.13);box-shadow:inset 0 1px rgba(255,255,255,.05)}.idea-field{margin-bottom:13px}.idea-field label{display:block;margin:0 0 7px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.48}.idea-field input,.idea-field select,.idea-field textarea{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:12px 13px;background:rgba(255,255,255,.035);color:inherit;outline:none;font:inherit;font-size:13px}.idea-field textarea{min-height:105px;resize:vertical}.idea-field input:focus,.idea-field select:focus,.idea-field textarea:focus{border-color:rgba(105,205,255,.42);box-shadow:0 0 22px rgba(70,190,255,.07)}.idea-form button{width:100%;border:1px solid rgba(110,205,255,.24);border-radius:12px;padding:12px;background:rgba(80,190,255,.06);color:#dff7ff;cursor:pointer;font:inherit;font-size:13px;transition:.28s ease}.idea-form button:hover{transform:translateY(-1px);border-color:rgba(110,210,255,.45);box-shadow:0 10px 30px rgba(60,180,255,.12)}.idea-success{display:none;margin-top:10px;text-align:center;font-size:12px;color:#bdeeff}.idea-board.sent .idea-success{display:block}
-body:not(.dark) .idea-board{background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(245,248,250,.82));border-color:rgba(0,0,0,.08);box-shadow:0 24px 70px rgba(0,0,0,.10)}body:not(.dark) .idea-copy p{color:rgba(0,0,0,.53)}body:not(.dark) .idea-form{background:rgba(0,0,0,.025);border-color:rgba(0,0,0,.07)}body:not(.dark) .idea-field input,body:not(.dark) .idea-field select,body:not(.dark) .idea-field textarea{background:rgba(255,255,255,.72);border-color:rgba(0,0,0,.10);color:#111}.idea-board.sent .idea-form{animation:ideaSent .45s ease}@keyframes ideaSent{50%{transform:scale(.99)}100%{transform:scale(1)}}
-@media(max-width:760px){.idea-board{grid-template-columns:1fr;gap:25px;padding:25px;border-radius:24px}.idea-copy h3{font-size:32px}}
 </style>
 </head>
 <body>
@@ -1453,26 +1446,7 @@ body:not(.dark) .idea-board{background:linear-gradient(135deg,rgba(255,255,255,.
     <section class="shell explain reveal" id="method"><div><p class="eyebrow">Projection thinking</p><h2>One object.<br><span class="blue">Several true views.</span></h2><p>Engineering Graphics is not about copying a shape. It is about placing that shape in relation to the horizontal and vertical planes, then communicating it precisely.</p></div><div class="diagram" aria-label="Simple illustration of horizontal and vertical projection planes"><div class="diagram-grid"></div><i class="axis axis-x"></i><i class="axis axis-y"></i><span class="axis-label label-x">X–Y reference</span><span class="axis-label label-h">H.P.</span><span class="axis-label label-v">V.P.</span><div class="mini-solid"><div></div><div></div><div></div></div><span class="callout callout-one">front view</span><span class="callout callout-two">top view</span></div></section>
     <section class="cta reveal"><div class="shell"><p class="eyebrow">Make every line intentional.</p><h2>Your next drawing starts with a better view.</h2><p>Choose a solid above, rotate it slowly, and sketch the face that is directly in front of you. Repeat from the top and side.</p><a class="button" href="#explore">Open the 3D viewer <span>→</span></a></div></section>
   <div class="creator-watermark" aria-label="Created by notgonnasaythat">notgonnasaythat</div>
-  
-    
-
-    
-
-    <section class="idea-board" id="ideaBoard" aria-label="Suggestions and feedback">
-      <div class="idea-copy">
-        <div class="idea-eyebrow">Help shape the lab</div>
-        <h3>Got an idea?</h3>
-        <p>Found something confusing, want a new topic, or have an idea that would make this site more useful? Tell me.</p>
-        <div class="idea-note">Suggestions are saved only on this browser.</div>
-      </div>
-      <form class="idea-form" id="ideaForm">
-        <div class="idea-field"><label for="ideaName">Name</label><input id="ideaName" maxlength="60" placeholder="Your name" autocomplete="name"></div>
-        <div class="idea-field"><label for="ideaType">Type</label><select id="ideaType"><option>Suggestion</option><option>Question</option><option>Problem</option><option>Other</option></select></div>
-        <div class="idea-field"><label for="ideaMessage">Message</label><textarea id="ideaMessage" maxlength="500" placeholder="Tell me what you have in mind…" required></textarea></div>
-        <button type="submit">Send feedback →</button><div class="idea-success">✓ Thanks — your feedback was saved.</div>
-      </form>
-    </section>
-</main>
+  </main>
   <footer><div class="shell footer-inner"><p>Form — Engineering Graphics study prototype.</p><p>Projection · solids · sections · development · isometric · CAD.</p><p class="watermark-footer">© notgonnasaythat</p></div></footer>
   <script>
     const canvas = document.getElementById('scene'), ctx = canvas.getContext('2d'), viewer = document.getElementById('viewer');
@@ -2063,21 +2037,6 @@ if(glowViewer){
       if(projectionReset3D) projectionReset3D.addEventListener('click',resetProjection3D);
       resetProjection3D();
     }
-
-// ===== Local suggestion board =====
-(function(){
-  const form=document.getElementById('suggestionForm'), input=document.getElementById('suggestionInput'), list=document.getElementById('suggestionList'), empty=document.getElementById('suggestionEmpty');
-  if(!form||!input||!list)return;
-  let items=[]; try{items=JSON.parse(localStorage.getItem('eg-suggestions')||'[]')}catch(e){items=[]}
-  function render(){list.innerHTML=''; if(!items.length){list.innerHTML='<div class="suggestion-empty">No suggestions yet.</div>';return} items.slice().reverse().forEach(x=>{const el=document.createElement('div');el.className='suggestion-item';el.textContent=x;list.appendChild(el)})}
-  form.addEventListener('submit',e=>{e.preventDefault();const v=input.value.trim();if(!v)return;items.push(v);items=items.slice(-20);try{localStorage.setItem('eg-suggestions',JSON.stringify(items))}catch(e){} input.value='';render()});
-  render();
-})();
-
-    
-    /* ===== Got an idea board ===== */
-    (function(){const form=document.getElementById('ideaForm'),board=document.getElementById('ideaBoard');if(!form)return;form.addEventListener('submit',function(e){e.preventDefault();const data={name:document.getElementById('ideaName').value.trim(),type:document.getElementById('ideaType').value,message:document.getElementById('ideaMessage').value.trim(),time:Date.now()};if(!data.message)return;try{const old=JSON.parse(localStorage.getItem('eg-idea-board')||'[]');old.push(data);localStorage.setItem('eg-idea-board',JSON.stringify(old.slice(-30)));}catch(e){}form.reset();board.classList.add('sent');setTimeout(()=>board.classList.remove('sent'),3500);});})();
->
 </script>
 </body>
 </html>
