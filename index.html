@@ -1291,6 +1291,14 @@ body.dark .viewer::before{
     .feedback-field.is-typing input,.feedback-field.is-typing textarea,.feedback-field.is-typing select{border-color:rgba(100,210,255,.38);box-shadow:0 0 0 2px rgba(70,190,255,.055),0 0 20px rgba(70,190,255,.10),inset 0 0 18px rgba(70,190,255,.025);}
     .feedback-field input:focus,.feedback-field textarea:focus{color:#f7fdff;text-shadow:0 0 10px rgba(110,220,255,.16);}
     @keyframes typingSmoke{0%{transform:translate(-50%,-50%) scale(.45);opacity:.7}55%{transform:translate(-50%,-54%) scale(1.15);opacity:.28}100%{transform:translate(-50%,-62%) scale(1.55);opacity:0}}
+
+    /* Apple-Music-inspired kinetic feedback typing */
+    .feedback-field input,.feedback-field textarea{transition:color .28s ease,text-shadow .28s ease,transform .28s cubic-bezier(.22,1,.36,1),border-color .25s ease,box-shadow .28s ease;}
+    .feedback-field.kinetic input,.feedback-field.kinetic textarea{transform:translateY(-1px) scale(1.002);color:#fff;text-shadow:0 0 16px rgba(105,220,255,.28),0 0 32px rgba(105,120,255,.10);}
+    .feedback-field.kinetic::before{content:"";position:absolute;z-index:0;left:12%;right:12%;bottom:10px;height:42px;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse,rgba(85,205,255,.16),rgba(100,90,255,.07) 35%,transparent 72%);filter:blur(16px);animation:lyricBreath .8s cubic-bezier(.22,1,.36,1) both;}
+    .feedback-field input,.feedback-field textarea{position:relative;z-index:1;}
+    @keyframes lyricBreath{0%{opacity:0;transform:translateY(8px) scale(.78)}35%{opacity:.9}100%{opacity:0;transform:translateY(-5px) scale(1.12)}}
+    @media(prefers-reduced-motion:reduce){.feedback-field.kinetic input,.feedback-field.kinetic textarea{transform:none}.feedback-field.kinetic::before{animation:none;opacity:.2}}
 </style>
 </head>
 <body>
@@ -2126,24 +2134,23 @@ if(glowViewer){
   });
 })();
 
-// ===== Typing neon response =====
+// ===== Apple-Music-inspired kinetic typing =====
 (function(){
-  const fields=document.querySelectorAll('#feedbackForm input,#feedbackForm textarea,#feedbackForm select');
+  const fields=document.querySelectorAll('#feedbackForm input,#feedbackForm textarea');
   fields.forEach(field=>{
     const wrap=field.closest('.feedback-field');
     if(!wrap)return;
+    let timer;
     field.addEventListener('input',()=>{
-      const r=field.getBoundingClientRect(),wr=wrap.getBoundingClientRect();
-      wrap.style.setProperty('--typing-x',((r.left+r.width*.5-wr.left)/wr.width*100)+'%');
-      wrap.style.setProperty('--typing-y',((r.top+r.height*.5-wr.top)/wr.height*100)+'%');
-      wrap.classList.remove('is-typing');
+      wrap.classList.remove('kinetic');
       void wrap.offsetWidth;
-      wrap.classList.add('is-typing');
+      wrap.classList.add('kinetic');
+      clearTimeout(timer);
+      timer=setTimeout(()=>wrap.classList.remove('kinetic'),420);
     });
-    field.addEventListener('animationend',()=>wrap.classList.remove('is-typing'));
-    field.addEventListener('blur',()=>wrap.classList.remove('is-typing'));
+    field.addEventListener('blur',()=>wrap.classList.remove('kinetic'));
   });
-})();</script>
+})();/script>
 </body>
 </html
 
