@@ -330,10 +330,11 @@
     }
     .quadrant strong { display:block; color:inherit; font-size:14px; margin-bottom:3px; }
     .quadrant.active { color:#dff4ff; background:radial-gradient(circle at center,rgba(61,177,255,.11),transparent 68%); }
-    .q1 { left:6%; top:7%; text-align:right; }
-    .q2 { right:6%; top:7%; }
-    .q3 { right:6%; bottom:7%; }
-    .q4 { left:6%; bottom:7%; text-align:right; }
+    /* Teacher convention: Q1 top-right, Q2 top-left, Q3 bottom-left, Q4 bottom-right. */
+    .q1 { right:6%; top:7%; }
+    .q2 { left:6%; top:7%; text-align:right; }
+    .q3 { left:6%; bottom:7%; text-align:right; }
+    .q4 { right:6%; bottom:7%; }
     .point {
       position:absolute; width:18px; height:18px; margin:-9px 0 0 -9px; border-radius:50%;
       background:#fff; box-shadow:0 0 0 5px rgba(95,194,255,.16),0 0 28px rgba(92,197,255,.9);
