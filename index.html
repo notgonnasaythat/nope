@@ -1259,15 +1259,18 @@ body.dark .viewer::before{
     @media(max-width:720px){.feedback-section{padding:65px 0}.feedback-wrap{grid-template-columns:1fr;gap:28px}.feedback-card{padding:19px}.feedback-row{grid-template-columns:1fr;gap:13px}}
 
 
-    /* Minimal dark feedback panel with cursor-reactive smoky neon */
-    .feedback-section{padding:78px 0;background:#050506;color:#f5f5f7;}
-    .feedback-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:42px;align-items:center;}
+    /* ===== Final feedback section ===== */
+    .feedback-section{position:relative;isolation:isolate;overflow:hidden;padding:82px 0;background:#050506;color:#f5f5f7;}
+    .feedback-section::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(70,190,255,.035),transparent 55%);}
+    .feedback-wrap{position:relative;z-index:1;display:grid;grid-template-columns:.9fr 1.1fr;gap:42px;align-items:center;}
     .feedback-copy h2{margin:0 0 12px;font-size:clamp(36px,4.5vw,58px);line-height:.98;letter-spacing:-.06em;}
-    .feedback-copy p:not(.section-kicker){max-width:430px;margin:0;color:#8e8e96;font-size:16px;}
-    .feedback-card{position:relative;overflow:hidden;padding:25px;border:1px solid rgba(255,255,255,.11);border-radius:22px;background:rgba(14,15,18,.82);box-shadow:0 20px 55px rgba(0,0,0,.35);}
-    .feedback-card::before{content:"";position:absolute;inset:-35%;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--feedback-x,50%) var(--feedback-y,50%),rgba(70,205,255,.18),rgba(105,75,255,.08) 18%,transparent 45%);filter:blur(30px);transition:opacity .35s ease;}
-    .feedback-card:hover::before{opacity:1;}
-    .feedback-form{position:relative;z-index:1;display:grid;gap:13px;}
+    .feedback-copy p:not(.section-kicker){max-width:430px;margin:0;color:#8e8e96;font-size:16px;line-height:1.5;}
+    .feedback-card{--feedback-x:50%;--feedback-y:50%;position:relative;overflow:hidden;padding:25px;border:1px solid rgba(255,255,255,.11);border-radius:22px;background:rgba(13,14,17,.86);box-shadow:0 20px 55px rgba(0,0,0,.35);transform:translate3d(0,0,0);transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .35s ease,box-shadow .45s ease;}
+    .feedback-card::before{content:"";position:absolute;inset:-45%;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--feedback-x) var(--feedback-y),rgba(70,205,255,.20),rgba(105,75,255,.08) 16%,transparent 43%);filter:blur(34px);transition:opacity .35s ease;}
+    .feedback-card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.055),transparent 30%,transparent 70%,rgba(90,205,255,.035));}
+    .feedback-card.is-hovered{border-color:rgba(100,210,255,.24);box-shadow:0 26px 70px rgba(0,0,0,.45),0 0 34px rgba(65,190,255,.08);}
+    .feedback-card.is-hovered::before{opacity:1;}
+    .feedback-form{position:relative;z-index:2;display:grid;gap:13px;}
     .feedback-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
     .feedback-field label{display:block;margin:0 0 6px;color:#aeb0b8;font-size:11px;font-weight:650;}
     .feedback-field input,.feedback-field select,.feedback-field textarea{width:100%;border:1px solid rgba(255,255,255,.12);border-radius:11px;background:rgba(255,255,255,.045);color:#f5f5f7;font:inherit;font-size:14px;outline:none;transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;}
@@ -1280,8 +1283,6 @@ body.dark .viewer::before{
     .feedback-submit:hover{transform:translateY(-2px);background:rgba(80,190,255,.12);border-color:rgba(100,210,255,.48);box-shadow:0 0 18px rgba(70,190,255,.15),0 12px 28px rgba(0,0,0,.25);}
     .feedback-status{min-height:17px;color:#75d9ff;font-size:11px;text-align:center;}
     @media(max-width:720px){.feedback-section{padding:62px 0}.feedback-wrap{grid-template-columns:1fr;gap:25px}.feedback-card{padding:18px}.feedback-row{grid-template-columns:1fr}}
-    body.dark .feedback-section{background:#030304;}
-
 </style>
 </head>
 <body>
@@ -2085,21 +2086,37 @@ if(glowViewer){
       resetProjection3D();
     }
 
-// ===== Minimal local feedback capture =====
+// ===== Feedback cursor motion =====
 (function(){
-  const card=document.getElementById('feedbackCard'), form=document.getElementById('feedbackForm'), status=document.getElementById('feedbackStatus');
+  const card=document.getElementById('feedbackCard'),form=document.getElementById('feedbackForm'),status=document.getElementById('feedbackStatus');
   if(!card||!form)return;
-  card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--feedback-x',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');card.style.setProperty('--feedback-y',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');},{passive:true});
-  card.addEventListener('pointerleave',()=>{card.style.setProperty('--feedback-x','50%');card.style.setProperty('--feedback-y','50%');});
+  let tx=0,ty=0,cx=0,cy=0,raf=0;
+  const animate=()=>{
+    cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
+    card.style.setProperty('--feedback-x',cx+'%'); card.style.setProperty('--feedback-y',cy+'%');
+    raf=requestAnimationFrame(animate);
+  };
+  card.addEventListener('pointermove',e=>{
+    const r=card.getBoundingClientRect();
+    tx=(e.clientX-r.left)/r.width*100; ty=(e.clientY-r.top)/r.height*100;
+    card.classList.add('is-hovered');
+    if(!raf)raf=requestAnimationFrame(animate);
+  },{passive:true});
+  card.addEventListener('pointerleave',()=>{
+    tx=50;ty=50;card.classList.remove('is-hovered');
+  });
   form.addEventListener('submit',e=>{
     e.preventDefault();
     const data={name:form.name.value.trim(),type:form.type.value,message:form.message.value.trim(),time:new Date().toISOString()};
-    if(!data.message)return;
-    const saved=JSON.parse(localStorage.getItem('eg-feedback')||'[]'); saved.push(data); localStorage.setItem('eg-feedback',JSON.stringify(saved));
-    form.reset(); status.textContent='✓ Thanks — your feedback was saved on this device.'; setTimeout(()=>status.textContent='',4000);
+    if(!data.message){status.textContent='Write a message first.';return;}
+    try{
+      const saved=JSON.parse(localStorage.getItem('eg-feedback')||'[]');
+      saved.push(data);localStorage.setItem('eg-feedback',JSON.stringify(saved));
+      form.reset();status.textContent='✓ Feedback saved.';
+    }catch(err){status.textContent='Could not save feedback on this device.';}
+    setTimeout(()=>status.textContent='',3500);
   });
 })();
-
 </script>
 </body>
 </html
