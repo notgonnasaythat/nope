@@ -1123,6 +1123,7 @@ body.dark .viewer::before{
 .projection-stage .plane.hp{left:15%;top:25%;width:70%;height:58%;border:1px solid rgba(90,215,166,.42);background:rgba(48,190,139,.08)}.projection-stage .plane.vp{left:15%;top:13%;width:70%;height:70%;border:1px solid rgba(105,195,255,.42);background:rgba(54,153,220,.08)}
 .projection-stage .plane.hp{transform:rotateX(62deg) translateZ(-70px);transform-origin:50% 50%}.projection-stage .plane.vp{transform:translateZ(-70px)}
 .projection-3d-note{position:absolute;z-index:10;left:50%;top:6%;transform:translateX(-50%);padding:7px 11px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(7,10,13,.68);color:#b9dff2;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;pointer-events:none}@media(max-width:720px){.projection-3d-note{font-size:8px;top:3%;padding:6px 8px}}
+.projection-space{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transition:transform .18s ease-out}.projection-stage[data-q="1"] .point,.projection-stage[data-q="4"] .point{transform:translateZ(115px)}.projection-stage[data-q="2"] .point,.projection-stage[data-q="3"] .point{transform:translateZ(-45px)}.projection-stage[data-q="1"] .point::before,.projection-stage[data-q="4"] .point::before{content:"IN FRONT OF V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}.projection-stage[data-q="2"] .point::before,.projection-stage[data-q="3"] .point::before{content:"BEHIND V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}
 </style>
 </head>
 <body>
@@ -1793,6 +1794,34 @@ if(glowViewer){
   });
 })();
 
+
+    /* 3D projection space: keep the plane system together so it can be rotated. */
+    const projectionSpace=document.createElement('div');
+    projectionSpace.className='projection-space';
+    projectionSpace.id='projectionSpace';
+    if(projectionStage){
+      const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer'));
+      sceneNodes.forEach(el=>projectionSpace.appendChild(el));
+      projectionStage.appendChild(projectionSpace);
+      let sceneDrag=false,lastSX=0,lastSY=0,rx=0,ry=0;
+      const applySceneRotation=()=>{
+        rx=Math.max(-18,Math.min(18,rx)); ry=Math.max(-24,Math.min(24,ry));
+        projectionSpace.style.setProperty('--scene-rx',rx+'deg');
+        projectionSpace.style.setProperty('--scene-ry',ry+'deg');
+      };
+      projectionStage.addEventListener('pointerdown',e=>{
+        if(e.target.closest('.point,.view-marker'))return;
+        sceneDrag=true;lastSX=e.clientX;lastSY=e.clientY;projectionStage.setPointerCapture(e.pointerId);
+      });
+      projectionStage.addEventListener('pointermove',e=>{
+        if(!sceneDrag)return;
+        ry+=(e.clientX-lastSX)*.22;rx-=(e.clientY-lastSY)*.16;
+        lastSX=e.clientX;lastSY=e.clientY;applySceneRotation();
+      });
+      const stopSceneDrag=()=>{sceneDrag=false};
+      projectionStage.addEventListener('pointerup',stopSceneDrag);
+      projectionStage.addEventListener('pointercancel',stopSceneDrag);
+    }
 </script>
 </body>
 </html>
