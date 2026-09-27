@@ -1180,100 +1180,28 @@ body.dark .viewer::before{
 
     renderMicroDetail('geometry'); window.addEventListener('resize',resize);resize();
   
-// ===== Smooth 60FPS render loop =====
-// Keep the canvas alive at the browser's native refresh rate so motion feels continuous.
-// The model gets a tiny idle drift; dragging takes full control immediately.
-let lastFrame = performance.now();
-let idleTime = 0;
-let motionFrame = 0;
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function smoothRender(now){
-  const dt=Math.min(32, now-lastFrame);
-  lastFrame=now;
-  idleTime += dt;
-  if(!state.dragging && !reduceMotion){
-    const t=idleTime/1000;
-    // Very subtle breathing motion — enough to make the viewer feel alive without spinning the model.
-    const targetRx=-.38 + Math.sin(t*.72)*.018;
-    const targetRy=.62 + Math.sin(t*.46)*.035;
-    state.rx += (targetRx-state.rx)*Math.min(1,dt*.0045);
-    state.ry += (targetRy-state.ry)*Math.min(1,dt*.0045);
-    draw();
-  }
-  motionFrame=requestAnimationFrame(smoothRender);
-}
-if(!reduceMotion) motionFrame=requestAnimationFrame(smoothRender);
-
-// Smooth pointer tilt using interpolation instead of applying a new transform directly
-// on every pointer event.
-const smoothViewer=document.getElementById('viewer');
-let tiltX=0, tiltY=0, targetTiltX=0, targetTiltY=0;
-if(smoothViewer && !reduceMotion){
-  smoothViewer.addEventListener('pointermove',e=>{
-    if(state.dragging)return;
-    const r=smoothViewer.getBoundingClientRect();
-    targetTiltY=((e.clientX-r.left)/r.width-.5)*1.6;
-    targetTiltX=-((e.clientY-r.top)/r.height-.5)*1.6;
-  },{passive:true});
-  smoothViewer.addEventListener('pointerleave',()=>{
-    targetTiltX=0; targetTiltY=0;
-  },{passive:true});
-
-  function tiltLoop(){
-    tiltX += (targetTiltX-tiltX)*.11;
-    tiltY += (targetTiltY-tiltY)*.11;
-    if(!state.dragging){
-      smoothViewer.style.transform=`perspective(1200px) rotateX(${tiltX.toFixed(3)}deg) rotateY(${tiltY.toFixed(3)}deg) translate3d(0,-2px,0)`;
-    }
-    requestAnimationFrame(tiltLoop);
-  }
-  requestAnimationFrame(tiltLoop);
-}
-
-  // ===== Light / dark mode =====
-const themeToggle=document.getElementById('themeToggle');
-const themeIcon=themeToggle?.querySelector('.theme-icon');
-const themeText=themeToggle?.querySelector('.theme-text');
-function applyTheme(mode){
-  const dark=mode==='dark';
-  document.body.classList.toggle('dark',dark);
-  if(themeIcon)themeIcon.textContent=dark?'☀':'☾';
-  if(themeText)themeText.textContent=dark?'Light':'Dark';
-  if(themeToggle)themeToggle.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
-  localStorage.setItem('eg-theme',mode);
-}
-const savedTheme=localStorage.getItem('eg-theme');
-const preferred=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-applyTheme(savedTheme||preferred);
-themeToggle?.addEventListener('click',()=>applyTheme(document.body.classList.contains('dark')?'light':'dark'));
-
-
 // ===== Interactive mouse-tracking glow =====
 const glowViewer=document.querySelector('.viewer');
 if(glowViewer){
-  let gx=50, gy=50, tx=50, ty=50, glowActive=false;
+  let gx=50,gy=50,tx=50,ty=50,active=false;
   glowViewer.addEventListener('pointermove',e=>{
     const r=glowViewer.getBoundingClientRect();
-    tx=((e.clientX-r.left)/r.width)*100;
-    ty=((e.clientY-r.top)/r.height)*100;
-    glowActive=true;
+    tx=(e.clientX-r.left)/r.width*100;
+    ty=(e.clientY-r.top)/r.height*100;
+    active=true;
   },{passive:true});
   glowViewer.addEventListener('pointerleave',()=>{
-    glowActive=false;
-    tx=50; ty=50;
+    active=false;tx=50;ty=50;
   },{passive:true});
   function glowLoop(){
-    gx+=(tx-gx)*0.16;
-    gy+=(ty-gy)*0.16;
+    gx+=(tx-gx)*.16; gy+=(ty-gy)*.16;
     glowViewer.style.setProperty('--mx',gx.toFixed(2)+'%');
     glowViewer.style.setProperty('--my',gy.toFixed(2)+'%');
-    glowViewer.classList.toggle('mouse-away',!glowActive);
+    glowViewer.classList.toggle('mouse-away',!active);
     requestAnimationFrame(glowLoop);
   }
   requestAnimationFrame(glowLoop);
 }
-
 </script>
 </body>
 </html>
