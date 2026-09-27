@@ -1123,7 +1123,26 @@ body.dark .viewer::before{
 .projection-stage .plane.hp{left:15%;top:25%;width:70%;height:58%;border:1px solid rgba(90,215,166,.42);background:rgba(48,190,139,.08)}.projection-stage .plane.vp{left:15%;top:13%;width:70%;height:70%;border:1px solid rgba(105,195,255,.42);background:rgba(54,153,220,.08)}
 .projection-stage .plane.hp{transform:rotateX(62deg) translateZ(-70px);transform-origin:50% 50%}.projection-stage .plane.vp{transform:translateZ(-70px)}.projection-stage{touch-action:none}
 .projection-3d-note{position:absolute;z-index:10;left:50%;top:6%;transform:translateX(-50%);padding:7px 11px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(7,10,13,.68);color:#b9dff2;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;pointer-events:none}@media(max-width:720px){.projection-3d-note{font-size:8px;top:3%;padding:6px 8px}}
-.projection-space{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transition:transform .18s ease-out}.projection-stage[data-q="1"] .point,.projection-stage[data-q="4"] .point{transform:translateZ(115px)}.projection-stage[data-q="2"] .point,.projection-stage[data-q="3"] .point{transform:translateZ(-45px)}.projection-stage[data-q="1"] .point::before,.projection-stage[data-q="4"] .point::before{content:"IN FRONT OF V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}.projection-stage[data-q="2"] .point::before,.projection-stage[data-q="3"] .point::before{content:"BEHIND V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}
+.projection-space{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--scene-rx,0deg)) rotateY(var(--scene-ry,0deg));transition:transform .18s ease-out;will-change:transform}
+.projection-stage{perspective:1500px;transform-style:preserve-3d;touch-action:pan-y;cursor:grab}
+.projection-stage.dragging{cursor:grabbing}
+.projection-space.is-dragging{transition:none!important}
+.observer{z-index:30}
+.observer svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 3px 7px rgba(0,0,0,.3))}
+.observer-front{left:1.8%;top:50%;transform:translateY(-50%)}
+.observer-top{left:50%;top:1.5%;transform:translateX(-50%)}
+.lab-3d-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.lab-reset-3d{opacity:.86}
+@media(max-width:720px){
+  .projection-stage{touch-action:pan-y;cursor:grab}
+  .projection-stage.dragging{cursor:grabbing}
+  .observer{font-size:7px}
+  .observer svg{width:22px;height:22px}
+  .observer-front{left:1%}
+  .observer-top{top:1%}
+  .lab-3d-actions{width:100%}
+  .lab-3d-actions .tour-btn{flex:1;min-width:0}
+}.projection-stage[data-q="1"] .point,.projection-stage[data-q="4"] .point{transform:translateZ(115px)}.projection-stage[data-q="2"] .point,.projection-stage[data-q="3"] .point{transform:translateZ(-45px)}.projection-stage[data-q="1"] .point::before,.projection-stage[data-q="4"] .point::before{content:"IN FRONT OF V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}.projection-stage[data-q="2"] .point::before,.projection-stage[data-q="3"] .point::before{content:"BEHIND V.P.";position:absolute;left:18px;top:-6px;white-space:nowrap;color:#9edcff;font-size:8px;font-weight:800}
 </style>
 </head>
 <body>
@@ -1175,8 +1194,8 @@ body.dark .viewer::before{
           <div class="plane-label xy">X–Y</div>
           <div class="plane-label hp">H.P. · horizontal plane</div>
           <div class="plane-label vp">V.P. · vertical plane</div>
-           <div class="observer observer-front" aria-label="Front view observer"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/></svg><span>FRONT OBSERVER</span><span class="observer-arrow">→</span></div>
-           <div class="observer observer-top" aria-label="Top view observer"><span>TOP OBSERVER</span><span class="observer-arrow">↓</span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/></svg></div>
+           <div class="observer observer-front" aria-label="Front view observer"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="7" r="4"/><path d="M9 28v-7c0-4 3-7 7-7s7 3 7 7v7M6 20h6M20 20h6"/></svg><span>FRONT OBSERVER</span><span class="observer-arrow">→</span></div>
+           <div class="observer observer-top" aria-label="Top view observer"><span>TOP OBSERVER</span><span class="observer-arrow">↓</span><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="7" r="4"/><path d="M9 28v-7c0-4 3-7 7-7s7 3 7 7v7M6 20h6M20 20h6"/></svg></div>
 
           <div class="quadrant q1" data-q="1"><strong>1st QUADRANT</strong>Above H.P. · In front of V.P.</div>
           <div class="quadrant q2" data-q="2"><strong>2nd QUADRANT</strong>Above H.P. · Behind V.P.</div>
@@ -1197,7 +1216,10 @@ body.dark .viewer::before{
             <button class="q-btn" data-q="3">Q3</button>
             <button class="q-btn" data-q="4">Q4</button>
           </div>
-          <button class="tour-btn" id="quadrantTour">▶ Auto tour</button>
+          <div class="lab-3d-actions">
+            <button class="tour-btn" id="quadrantTour">▶ Q1 → Q2 → Q3 → Q4</button>
+            <button class="tour-btn lab-reset-3d" id="projectionReset3D" type="button">↺ Reset 3D</button>
+          </div>
         </div>
 
         <div class="projection-info">
@@ -1542,7 +1564,10 @@ body.dark .viewer::before{
       document.getElementById('challengeFeedback').textContent='Choose one. The site will explain why.';
     }
 
-    document.querySelectorAll('.q-btn').forEach(b=>b.addEventListener('click',()=>setQuadrant(b.dataset.q)));
+    document.querySelectorAll('.q-btn').forEach(b=>b.addEventListener('click',()=>{
+      if(tourTimer){clearInterval(tourTimer);tourTimer=null;const tourBtn=document.getElementById('quadrantTour');if(tourBtn)tourBtn.textContent='▶ Q1 → Q2 → Q3 → Q4';}
+      setQuadrant(b.dataset.q);
+    }));
 
     const quadrantPointDrag=()=>{
       if(!projectionStage||!projectionPoint)return;
@@ -1604,6 +1629,7 @@ body.dark .viewer::before{
         document.getElementById('challengeFeedback').textContent=`Not this time. Look at the point relative to H.P. and V.P. — it is in the ${qData[currentQ].name.toLowerCase()}.`;
       }
     }));
+    // Restore the first model position: Q1 is the default starting quadrant.
     setQuadrant(1);
 
 
@@ -1807,24 +1833,46 @@ if(glowViewer){
       const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer'));
       sceneNodes.forEach(el=>projectionSpace.appendChild(el));
       projectionStage.appendChild(projectionSpace);
-      let sceneDrag=false,lastSX=0,lastSY=0,rx=0,ry=0;
+      let sceneDrag=false,lastSX=0,lastSY=0,rx=-12,ry=-28;
+      const normalizeAngle=a=>((a%360)+360)%360;
       const applySceneRotation=()=>{
-        rx=Math.max(-18,Math.min(18,rx)); ry=Math.max(-24,Math.min(24,ry));
+        // Yaw is fully 360°; pitch is allowed through a full turn without a hard ±24° clamp.
+        ry=normalizeAngle(ry);
+        rx=normalizeAngle(rx);
         projectionSpace.style.setProperty('--scene-rx',rx+'deg');
         projectionSpace.style.setProperty('--scene-ry',ry+'deg');
       };
+      const resetProjection3D=()=>{
+        rx=-12;ry=-28;
+        projectionSpace.classList.remove('is-dragging');
+        projectionStage.classList.remove('dragging');
+        applySceneRotation();
+      };
       projectionStage.addEventListener('pointerdown',e=>{
-        if(e.target.closest('.point,.view-marker'))return;
-        sceneDrag=true;lastSX=e.clientX;lastSY=e.clientY;projectionStage.setPointerCapture(e.pointerId);
+        if(e.target.closest('.point,.view-marker,.observer,.projection-3d-note'))return;
+        sceneDrag=true;lastSX=e.clientX;lastSY=e.clientY;
+        projectionSpace.classList.add('is-dragging');
+        projectionStage.classList.add('dragging');
+        projectionStage.setPointerCapture(e.pointerId);
       });
       projectionStage.addEventListener('pointermove',e=>{
         if(!sceneDrag)return;
-        ry+=(e.clientX-lastSX)*.22;rx-=(e.clientY-lastSY)*.16;
-        lastSX=e.clientX;lastSY=e.clientY;applySceneRotation();
+        ry+=(e.clientX-lastSX)*.42;
+        rx-=(e.clientY-lastSY)*.30;
+        lastSX=e.clientX;lastSY=e.clientY;
+        applySceneRotation();
       });
-      const stopSceneDrag=()=>{sceneDrag=false};
+      const stopSceneDrag=()=>{
+        sceneDrag=false;
+        projectionSpace.classList.remove('is-dragging');
+        projectionStage.classList.remove('dragging');
+      };
       projectionStage.addEventListener('pointerup',stopSceneDrag);
       projectionStage.addEventListener('pointercancel',stopSceneDrag);
+      projectionStage.addEventListener('lostpointercapture',stopSceneDrag);
+      const projectionReset3D=document.getElementById('projectionReset3D');
+      if(projectionReset3D) projectionReset3D.addEventListener('click',resetProjection3D);
+      resetProjection3D();
     }
 </script>
 </body>
