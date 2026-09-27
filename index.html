@@ -51,7 +51,7 @@
     .callout { position:absolute; padding:8px 11px; border-radius:9px; background:#fff; color:#24648f; box-shadow:0 8px 18px rgba(39,100,144,.12); font-size:11px; font-weight:600; }.callout-one { top:20%; right:10%; }.callout-two { bottom:19%; left:12%; }
     .cta { padding:93px 0 105px; text-align:center; }.cta h2 { max-width:670px; margin:0 auto 15px; font-size:clamp(38px,5vw,64px); line-height:1; letter-spacing:-.065em; }.cta p { max-width:520px; margin:0 auto 26px; color:var(--muted); font-size:18px; }.button { padding:12px 20px; font-size:17px; }.button span { margin-left:7px; font-size:20px; line-height:0; }
     footer { padding:24px 0; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }.footer-inner { display:flex; justify-content:space-between; gap:20px; }.footer-inner p { margin:0; }
-    @media (max-width:1050px) { .model-selector { grid-template-columns:repeat(3,1fr); } }\n    @media (max-width:720px) { .shell { width:min(100% - 30px,1200px); }.nav-links { display:none; position:absolute; top:52px; left:0; right:0; padding:18px 15px 20px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.97); flex-direction:column; align-items:start; gap:15px; }.nav-links.open { display:flex; }.menu { display:block; }.intro { padding:64px 0 26px; }.intro-copy { font-size:18px; }.viewer-section { padding-bottom:60px; }.viewer { min-height:510px; border-radius:20px; } #scene { height:510px; }.viewer-top { top:17px; left:18px; right:18px; }.hint { font-size:0; }.viewer-caption { left:20px; bottom:82px; width:calc(100% - 40px); }.viewer-caption p { font-size:14px; }.controls { right:18px; bottom:17px; }.model-selector { grid-template-columns:1fr 1fr; }.model-card { min-height:77px; padding:12px 13px; }.model-card b { font-size:14px; }.learn,.explain { padding:65px 0; }.steps { grid-template-columns:1fr; }.step,.step:not(:first-child) { min-height:unset; padding:22px 0; border-right:0; border-bottom:1px solid var(--line); }.step-num { margin-bottom:17px; }.explain { grid-template-columns:1fr; gap:35px; }.diagram { min-height:320px; }.footer-inner { flex-direction:column; }.hide-mobile { display:none; } }
+    @media (max-width:1050px) { .model-selector { grid-template-columns:repeat(3,1fr); } }\n    @media (max-width:720px) { .shell { width:min(100% - 30px,1200px); }.nav { height:auto; min-height:58px; }.nav-inner { min-height:58px; height:auto; flex-wrap:wrap; padding:7px 0 8px; row-gap:5px; }.nav-actions { display:flex; align-items:center; }.nav-links { display:grid !important; position:static; width:100%; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; padding:5px 0 0; border:0; background:transparent; box-shadow:none; }.nav-links a:not(.nav-button) { display:flex; align-items:center; justify-content:center; min-height:34px; padding:7px 8px; border:1px solid var(--line); border-radius:10px; background:rgba(255,255,255,.72); font-size:11px; }.nav-links .nav-button { grid-column:1 / -1; min-height:36px; }.intro { padding:64px 0 26px; }.intro-copy { font-size:18px; }.viewer-section { padding-bottom:60px; }.viewer { min-height:510px; border-radius:20px; } #scene { height:510px; }.viewer-top { top:17px; left:18px; right:18px; }.hint { font-size:0; }.viewer-caption { left:20px; bottom:82px; width:calc(100% - 40px); }.viewer-caption p { font-size:14px; }.controls { right:18px; bottom:17px; }.model-selector { grid-template-columns:1fr 1fr; }.model-card { min-height:77px; padding:12px 13px; }.model-card b { font-size:14px; }.learn,.explain { padding:65px 0; }.steps { grid-template-columns:1fr; }.step,.step:not(:first-child) { min-height:unset; padding:22px 0; border-right:0; border-bottom:1px solid var(--line); }.step-num { margin-bottom:17px; }.explain { grid-template-columns:1fr; gap:35px; }.diagram { min-height:320px; }.footer-inner { flex-direction:column; }.hide-mobile { display:none; } }
 
     .syllabus { padding:92px 0; background:#fff; }
     .section-kicker { margin:0 0 10px; color:var(--blue); font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
@@ -1061,7 +1061,7 @@ body.dark .viewer::before{
 <body>
   <header class="nav"><nav class="shell nav-inner"><a class="brand" href="#top"><span class="brand-mark"><span>+</span></span>Engineering Graphics</a><div class="nav-actions"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><span class="theme-icon">☾</span><span class="theme-text">Dark</span></button></div><div class="nav-links" id="navLinks"><a href="#syllabus">Course syllabus</a><a href="#explore">3D Lab</a><a href="#projection-lab">Projection Lab</a><a href="#projection-explainer">Learn FV / TV</a><a href="#details">Micro details</a><a href="#learn">Study method</a><a class="nav-button" href="#explore">Start exploring</a></div></nav></header>
   <main id="top">
-    <section class="shell intro"><p class="eyebrow">ENGINEERING GRAPHICS · ME203ES</p><h1>Engineering Graphics<br>you can actually see.</h1><p class="intro-copy">A visual study space for <b>engineering students</b> students. Rotate the solid, identify every geometric feature, then connect it to orthographic, sectional, development and isometric drawing.</p></section>
+    <section class="shell intro"><p class="eyebrow">ENGINEERING GRAPHICS · ME203ES</p><h1>Engineering Graphics<br>you can actually see.</h1><p class="intro-copy">A visual study space for <b>engineering students</b>. Rotate the solid, identify every geometric feature, then connect it to orthographic, sectional, development and isometric drawing.</p></section>
 
     <section class="syllabus reveal" id="syllabus">
       <div class="shell">
@@ -1344,7 +1344,8 @@ body.dark .viewer::before{
       state.zoom=Math.max(.62,Math.min(1.45,state.zoom-e.deltaY*.0008));
       draw();
     },{passive:false});
-    const menuButton=document.getElementById('menuButton'),navLinks=document.getElementById('navLinks');menuButton.addEventListener('click',()=>{navLinks.classList.toggle('open');menuButton.textContent=navLinks.classList.contains('open')?'×':'☰';});navLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{navLinks.classList.remove('open');menuButton.textContent='☰';}));
+    const navLinks=document.getElementById('navLinks');
+    if(navLinks) navLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{navLinks.classList.remove('open');}));
 
     /* ===== Smooth glossy interactions ===== */
     const nav = document.querySelector('.nav');
@@ -1459,7 +1460,7 @@ body.dark .viewer::before{
         const r=projectionStage.getBoundingClientRect();
         let x=((e.clientX-r.left)/r.width)*100, y=((e.clientY-r.top)/r.height)*100;
         x=Math.max(8,Math.min(92,x)); y=Math.max(10,Math.min(90,y));
-        const q=(y<50 ? (x<50?1:2) : (x>=50?3:4));
+        const q=(y<50 ? (x>=50?1:2) : (x<50?3:4));
         currentQ=q;
         const d=qData[q];
         document.querySelectorAll('.q-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.q)===q));
