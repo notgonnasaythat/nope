@@ -1064,6 +1064,53 @@ body.dark .viewer::before{
       }
     }
 
+    /* ===== Micro Anatomy Game ===== */
+    .micro-game{
+      margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:18px;
+      background:linear-gradient(145deg,#f8fbff,#fff);position:relative;overflow:hidden;
+    }
+    .micro-game::before{
+      content:"";position:absolute;width:220px;height:220px;right:-110px;top:-110px;border-radius:50%;
+      background:radial-gradient(circle,rgba(0,113,227,.12),transparent 68%);pointer-events:none;
+    }
+    .micro-game-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
+    .micro-game-kicker{color:var(--blue);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .micro-game h4{margin:3px 0 3px;font-size:19px;letter-spacing:-.035em}
+    .micro-game-sub{margin:0;color:var(--muted);font-size:11px}
+    .micro-score{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .micro-pill{padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.75);font-size:10px;font-weight:750;white-space:nowrap}
+    .micro-question{margin-top:16px;padding:14px;border-radius:14px;background:#fff;border:1px solid #e4e4e7;position:relative;z-index:1}
+    .micro-question-label{color:#7b7b82;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+    .micro-question-text{margin:5px 0 12px;font-size:14px;font-weight:650;line-height:1.4}
+    .micro-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+    .micro-option{
+      min-height:43px;padding:9px 10px;border:1px solid #dddde2;border-radius:11px;background:#fafafa;
+      color:#34353a;text-align:left;font-size:11px;font-weight:600;transition:.25s var(--ease-smooth);
+    }
+    .micro-option:hover{transform:translateY(-2px);border-color:#a8c9df;background:#f3f9fe}
+    .micro-option.correct{border-color:#4fbf8a;background:#eafaf2;color:#17643f}
+    .micro-option.wrong{border-color:#ed8b8b;background:#fff0f0;color:#8d3030}
+    .micro-feedback{min-height:32px;margin-top:10px;color:var(--muted);font-size:11px;line-height:1.45}
+    .micro-next{
+      margin-top:8px;padding:9px 13px;border:0;border-radius:999px;background:var(--blue);color:#fff;
+      font-size:11px;font-weight:700;box-shadow:0 7px 18px rgba(0,113,227,.18);transition:.25s var(--ease-smooth)
+    }
+    .micro-next:hover{transform:translateY(-2px)}
+    .micro-game.complete{background:linear-gradient(145deg,#eef9ff,#f7fffb)}
+    .micro-game.complete .micro-question{background:rgba(255,255,255,.72)}
+    body.dark .micro-game{background:linear-gradient(145deg,#101820,#111115);border-color:#29292f}
+    body.dark .micro-pill,body.dark .micro-question,body.dark .micro-option{background:#17171c;border-color:#303036;color:#f4f4f5}
+    body.dark .micro-option:hover{background:#121d26;border-color:#3f6d89}
+    body.dark .micro-option.correct{background:#10291e;border-color:#4fbf8a;color:#baf7d7}
+    body.dark .micro-option.wrong{background:#2a1515;border-color:#d97979;color:#ffc4c4}
+    @media(max-width:720px){
+      .micro-game{padding:14px;border-radius:15px}
+      .micro-game-head{display:block}
+      .micro-score{justify-content:flex-start;margin-top:8px}
+      .micro-options{grid-template-columns:1fr}
+      .micro-option{min-height:40px}
+    }
+
     /* ===== Mobile horizontal overflow guard ===== */
     @media (max-width:720px){
       html,body{width:100%;max-width:100%;overflow-x:hidden!important}
@@ -1245,6 +1292,27 @@ body.dark .viewer::before{
             <p class="lead" id="detailLead"></p>
             <div class="micro-grid" id="microGrid"></div>
             <div class="exam-strip" id="detailExam"></div>
+            <div class="micro-game" id="microGame">
+              <div class="micro-game-head">
+                <div>
+                  <div class="micro-game-kicker">Micro Anatomy Sprint · +10 XP</div>
+                  <h4 id="microGameTitle">Can you spot the anatomy?</h4>
+                  <p class="micro-game-sub">Three tiny questions. Learn first, then test yourself.</p>
+                </div>
+                <div class="micro-score">
+                  <span class="micro-pill" id="microProgress">1 / 3</span>
+                  <span class="micro-pill" id="microScore">XP 0</span>
+                  <span class="micro-pill" id="microStreak">🔥 0</span>
+                </div>
+              </div>
+              <div class="micro-question">
+                <div class="micro-question-label" id="microQuestionType">Anatomy check</div>
+                <div class="micro-question-text" id="microQuestion"></div>
+                <div class="micro-options" id="microOptions"></div>
+                <div class="micro-feedback" id="microFeedback">Pick an answer. Wrong answers explain the trap.</div>
+                <button class="micro-next" id="microNext" type="button" hidden>Next micro challenge →</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1299,9 +1367,10 @@ body.dark .viewer::before{
       document.getElementById('microGrid').innerHTML=data.map((x,i)=>{const parts=x.split(' → ');return `<article class="micro reveal delay-1"><b>${String(i+1).padStart(2,'0')} ${parts[0]}</b><p>${parts[1]||''}</p></article>`;}).join('');
       const examText={geometry:"<b>Think first:</b> name the base, faces, edges, vertices and axis before drawing.",orthographic:"<b>Projection check:</b> every point in one view must correspond to the same projector in the related view.",section:"<b>Section check:</b> distinguish the cutting plane, section boundary and remaining visible outlines.",development:"<b>Development check:</b> unfolding changes position, not the actual length of the surface being developed.",isometric:"<b>Isometric check:</b> keep the three principal directions consistent; circles become ellipses.",exam:"<b>Exam habit:</b> construct lightly → verify alignment → darken final outlines → add hidden, section and dimension conventions as required."};
       document.getElementById('detailExam').innerHTML=examText[kind];
+      if(typeof renderMicroGame==='function') renderMicroGame(true);
     }
 
-    function setModel(id) { state.model=id;state.rx=-.38;state.ry=.62;state.zoom=1;const item=details[id];modelTitle.textContent=item.title;modelDescription.textContent=item.text;modelBadge.textContent=item.name;document.querySelectorAll('.model-card').forEach(c=>c.classList.toggle('active',c.dataset.model===id));draw(); }
+    function setModel(id) { state.model=id;state.rx=-.38;state.ry=.62;state.zoom=1;const item=details[id];modelTitle.textContent=item.title;modelDescription.textContent=item.text;modelBadge.textContent=item.name;document.querySelectorAll('.model-card').forEach(c=>c.classList.toggle('active',c.dataset.model===id));draw();renderMicroGame(true); }
     document.querySelectorAll('.model-card').forEach(c=>c.addEventListener('click',()=>setModel(c.dataset.model))); document.querySelectorAll('.detail-tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.detail-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');renderMicroDetail(tab.dataset.detail);}));
     document.getElementById('perspectiveButton').addEventListener('click',()=>{state.orthographic=false;document.getElementById('perspectiveButton').classList.add('active');document.getElementById('orthoButton').classList.remove('active');draw();});
     document.getElementById('orthoButton').addEventListener('click',()=>{state.orthographic=true;document.getElementById('orthoButton').classList.add('active');document.getElementById('perspectiveButton').classList.remove('active');draw();});
@@ -1428,27 +1497,31 @@ body.dark .viewer::before{
       currentQ=Number(q); const d=qData[currentQ];
       document.querySelectorAll('.q-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.q)===currentQ));
       document.querySelectorAll('.quadrant').forEach(el=>el.classList.toggle('active',Number(el.dataset.q)===currentQ));
-      const r=projectionStage.getBoundingClientRect();
-      const x=(currentQ===1||currentQ===4)?30:70;
+      // Teacher convention: Q1 top-right, Q2 top-left, Q3 bottom-left, Q4 bottom-right.
+      // Right of V.P. = in front; left of V.P. = behind.
+      const x=(currentQ===1||currentQ===4)?70:30;
       const y=(currentQ===1||currentQ===2)?30:70;
       projectionPoint.style.left=x+'%'; projectionPoint.style.top=y+'%';
 
-      // Project front view onto the vertical/reference plane.
-      frontProjector.style.left=x+'%';
-      frontProjector.style.top=Math.min(y,50)+'%';
-      frontProjector.style.height=Math.abs(y-50)+'%';
+      // Front view projects perpendicular to V.P.: horizontally toward the vertical reference line.
+      frontProjector.style.left=Math.min(x,50)+'%';
+      frontProjector.style.top=y+'%';
+      frontProjector.style.width=Math.abs(x-50)+'%';
+      frontProjector.style.height='1px';
 
-      // Project top view onto the horizontal/reference plane.
-      topProjector.style.left=Math.min(x,50)+'%';
-      topProjector.style.top=y+'%';
-      topProjector.style.width=Math.abs(x-50)+'%';
+      // Top view projects perpendicular to H.P.: vertically toward the horizontal reference line.
+      topProjector.style.left=x+'%';
+      topProjector.style.top=Math.min(y,50)+'%';
+      topProjector.style.height=Math.abs(y-50)+'%';
+      topProjector.style.width='1px';
 
-      // Markers appear on the corresponding sides of XY.
-      const fvY=d.fv==='above XY'?45:55, tvX=x;
-      frontMarker.style.left=Math.max(4,Math.min(82,x-7))+'%';
-      frontMarker.style.top=(d.fv==='above XY'?Math.max(10,y-14):Math.min(82,y+5))+'%';
-      topMarker.style.left=(d.tv==='below XY'?Math.max(4,x-7):Math.min(82,x+3))+'%';
-      topMarker.style.top=(d.tv==='below XY'?Math.min(82,y+5):Math.max(10,y-14))+'%';
+      // After folding, FV follows the HP relation and TV follows the VP relation.
+      const fvTop=d.fv==='above XY'?30:70;
+      const tvTop=d.tv==='below XY'?70:30;
+      frontMarker.style.left='calc(50% + 9px)';
+      frontMarker.style.top=fvTop+'%';
+      topMarker.style.left='calc('+x+'% + 9px)';
+      topMarker.style.top=tvTop+'%';
       frontMarker.classList.add('visible'); topMarker.classList.add('visible');
 
       document.getElementById('quadrantName').textContent=d.name;
@@ -1590,7 +1663,81 @@ body.dark .viewer::before{
     });
     renderLesson(1);
 
-    renderMicroDetail('geometry'); window.addEventListener('resize',resize);resize();
+    /* ===== Micro Anatomy Sprint ===== */
+    const microQuizBank={
+      cube:[
+        {type:'Face check',q:'A cube has how many square faces?',o:['4','6','8'],a:1,e:'Six faces make the cube closed. Eight is the number of vertices.'},
+        {type:'View detective',q:'With a cube in a simple position, what is a principal view?',o:['A square','A triangle','A circle'],a:0,e:'A cube projects as a square in each principal view when aligned conventionally.'},
+        {type:'Exam trap',q:'Before drawing hidden edges, what should you establish?',o:['The final dimensions','The viewing direction and visible geometry','The title block'],a:1,e:'First lock the view direction and visible geometry; hidden detail comes after.'}
+      ],
+      prism:[
+        {type:'Anatomy check',q:'A hexagonal prism has how many lateral faces?',o:['4','6','8'],a:1,e:'Each of the six sides of the hexagonal base connects to one lateral face.'},
+        {type:'View detective',q:'What stays parallel in a prism?',o:['Lateral edges','Only one base edge','The apex'],a:0,e:'A prism has parallel lateral edges and two equal, parallel bases.'},
+        {type:'Exam trap',q:'When projecting a prism, what should you track around the base?',o:['Corresponding corners','Random visible corners','Only the longest edge'],a:0,e:'Matching each base corner between views keeps the projection aligned.'}
+      ],
+      pyramid:[
+        {type:'Anatomy check',q:'Where do the lateral edges of a square pyramid meet?',o:['At the axis only','At the apex','At the base centre'],a:1,e:'The sloping lateral edges converge at one apex.'},
+        {type:'View detective',q:'What makes the pyramid different from a prism?',o:['It has an apex','It has a base','It has edges'],a:0,e:'The defining feature here is the single apex with triangular lateral faces.'},
+        {type:'Exam trap',q:'Which two heights must you not confuse?',o:['Base and width','Vertical height and slant height','Front and top view'],a:1,e:'Vertical height and slant height are different lengths and are used differently.'}
+      ],
+      cylinder:[
+        {type:'Anatomy check',q:'What are the two ends of a cylinder?',o:['Circular bases','Triangular bases','Apexes'],a:0,e:'A cylinder has two equal circular bases joined by one curved lateral surface.'},
+        {type:'Development',q:'The developed curved surface of a cylinder becomes a…',o:['Triangle','Rectangle','Circle'],a:1,e:'Its height stays the rectangle height and its length equals πD.'},
+        {type:'Isometric trap',q:'In standard isometric drawing, a circular face is shown as a…',o:['Circle','Ellipse','Triangle'],a:1,e:'A circle on an isometric plane is represented by an isometric ellipse.'}
+      ],
+      cone:[
+        {type:'Anatomy check',q:'A cone has one circular base and one…',o:['Apex','Prism','Second base'],a:0,e:'All generators of the cone meet at the apex.'},
+        {type:'Development',q:'The lateral development of a cone is a…',o:['Circular sector','Rectangle','Hexagon'],a:0,e:'The sector radius is the true slant length and its arc equals the base circumference.'},
+        {type:'Exam trap',q:'Which length is used as the sector radius?',o:['Vertical height','True slant length','Base diameter'],a:1,e:'For cone development, use the true slant length—not the vertical height.'}
+      ]
+    };
+    let microRound=0,microXP=0,microStreak=0,microLocked=false;
+    function renderMicroGame(reset=true){
+      if(reset){microRound=0;microXP=0;microStreak=0;}
+      const bank=microQuizBank[state.model]||microQuizBank.cube;
+      const item=bank[microRound];
+      const game=document.getElementById('microGame');
+      document.getElementById('microGameTitle').textContent=details[state.model].name+' · Anatomy Sprint';
+      document.getElementById('microProgress').textContent=Math.min(microRound+1,3)+' / 3';
+      document.getElementById('microScore').textContent='XP '+microXP;
+      document.getElementById('microStreak').textContent='🔥 '+microStreak;
+      const q=document.getElementById('microQuestion');
+      const opts=document.getElementById('microOptions');
+      const feedback=document.getElementById('microFeedback');
+      const next=document.getElementById('microNext');
+      game.classList.remove('complete'); microLocked=false; next.hidden=true;
+      if(!item){
+        game.classList.add('complete');
+        q.textContent='Sprint complete — '+microXP+' XP earned.';
+        opts.innerHTML='';
+        feedback.textContent=microXP===30?'Perfect run. You spotted the anatomy and the exam traps.':'Nice run. Replay after changing concept tabs to lock it in.';
+        next.hidden=false; next.textContent='Replay this sprint ↻';
+        return;
+      }
+      document.getElementById('microQuestionType').textContent=item.type;
+      q.textContent=item.q;
+      opts.innerHTML=item.o.map((option,i)=>'<button class="micro-option" type="button" data-index="'+i+'">'+option+'</button>').join('');
+      feedback.textContent='Pick an answer. Wrong answers explain the trap.';
+      opts.querySelectorAll('.micro-option').forEach(btn=>btn.addEventListener('click',()=>{
+        if(microLocked)return;
+        microLocked=true;
+        const answer=Number(btn.dataset.index);
+        const correct=answer===item.a;
+        btn.classList.add(correct?'correct':'wrong');
+        if(correct){microXP+=10;microStreak+=1;}
+        else{microStreak=0;opts.querySelectorAll('.micro-option')[item.a].classList.add('correct');}
+        feedback.textContent=(correct?'✓ Correct. ':'Not quite. ')+item.e;
+        document.getElementById('microScore').textContent='XP '+microXP;
+        document.getElementById('microStreak').textContent='🔥 '+microStreak;
+        next.hidden=false;
+      }));
+    }
+    document.getElementById('microNext').addEventListener('click',()=>{
+      if(microRound>=3){renderMicroGame(true);return;}
+      microRound+=1;renderMicroGame(false);
+    });
+
+    renderMicroDetail('geometry'); renderMicroGame(true); window.addEventListener('resize',resize);resize();
   
 // ===== Interactive mouse-tracking glow =====
 const glowViewer=document.querySelector('.viewer');
