@@ -1499,7 +1499,7 @@ body.dark .viewer::before{
     let currentQ=1, tourTimer=null;
 
     function setQuadrant(q,animate=true){
-      currentQ=Number(q); const d=qData[currentQ];
+      currentQ=Number(q); const d=qData[currentQ]; projectionStage.dataset.q=String(currentQ);
       document.querySelectorAll('.q-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.q)===currentQ));
       document.querySelectorAll('.quadrant').forEach(el=>el.classList.toggle('active',Number(el.dataset.q)===currentQ));
       // Teacher convention: Q1 top-right, Q2 top-left, Q3 bottom-left, Q4 bottom-right.
