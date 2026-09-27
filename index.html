@@ -945,9 +945,17 @@ body.dark .viewer::before{
       .detail-panel h3{font-size:24px}
       .micro-grid{gap:8px}
       .micro{padding:13px}
-      .projection-lab{padding:58px 0}
-      .projection-stage{min-height:390px;border-radius:18px}
-      .quadrant{font-size:8px;padding:8px}
+      .projection-lab{padding:48px 0}
+      /* Mobile-friendly projection canvas: follows the phone's width instead of a fixed desktop height. */
+      .projection-stage{
+        width:100%;
+        min-height:0;
+        height:auto;
+        aspect-ratio:4 / 3;
+        border-radius:18px;
+        overflow:hidden;
+      }
+      .quadrant{font-size:8px;padding:7px}
       .quadrant strong{font-size:10px}
       .plane-label{font-size:7px}
       .lab-ui{gap:10px}
@@ -999,7 +1007,10 @@ body.dark .viewer::before{
       .model-card{min-height:72px}
       .unit-grid{grid-template-columns:1fr}
       .detail-tabs{grid-template-columns:1fr}
-      .projection-stage{min-height:350px}
+      .projection-stage{
+        min-height:0;
+        aspect-ratio:4 / 3;
+      }
       .projection-info{grid-template-columns:1fr}
       .challenge-options{grid-template-columns:1fr}
       .learning-steps{grid-template-columns:1fr}
