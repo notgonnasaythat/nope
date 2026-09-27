@@ -302,6 +302,19 @@
     .projection-head .section-kicker { color:#72c8ff; }
     .projection-head h2 { margin:0 0 13px; font-size:clamp(38px,5vw,68px); line-height:.98; letter-spacing:-.065em; }
     .projection-head p { margin:0; color:#9c9da4; font-size:18px; max-width:650px; }
+    .observer{position:absolute;z-index:6;display:flex;align-items:center;gap:7px;color:#dcefff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.28))}
+    .observer svg{width:24px;height:24px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7}
+    .observer .observer-arrow{font-size:18px;line-height:1}
+    .observer-front{left:2.5%;top:46%;transform:translateY(-50%)}
+    .observer-top{left:50%;top:1.5%;transform:translateX(-50%);flex-direction:column;gap:2px}
+    .observer-top .observer-arrow{transform:rotate(90deg)}
+    body.dark .observer{color:#d9efff}
+    @media(max-width:720px){
+      .observer{font-size:8px;gap:4px}
+      .observer svg{width:20px;height:20px}
+      .observer-front{left:1.5%}
+      .observer-top{top:1%}
+    }
     .projection-stage {
       position:relative; min-height:590px; border-radius:30px; overflow:hidden;
       border:1px solid rgba(255,255,255,.12);
@@ -1109,6 +1122,8 @@ body.dark .viewer::before{
           <div class="plane-label xy">X–Y</div>
           <div class="plane-label hp">H.P. · horizontal plane</div>
           <div class="plane-label vp">V.P. · vertical plane</div>
+           <div class="observer observer-front" aria-label="Front view observer"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5 21c.8-4.2 3.2-6.3 7 6.3s6.2 2.1 7 6.3"/></svg><span>FRONT OBSERVER</span><span class="observer-arrow">→</span></div>
+           <div class="observer observer-top" aria-label="Top view observer"><span>TOP OBSERVER</span><span class="observer-arrow">↓</span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5 21c.8-4.2 3.2-6.3 7 6.3s6.2 2.1 7 6.3"/></svg></div>
 
           <div class="quadrant q1" data-q="1"><strong>1st QUADRANT</strong>Above H.P. · In front of V.P.</div>
           <div class="quadrant q2" data-q="2"><strong>2nd QUADRANT</strong>Above H.P. · Behind V.P.</div>
