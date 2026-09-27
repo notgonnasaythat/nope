@@ -1026,6 +1026,17 @@ body.dark .viewer::before{
       .viewer,.model-card,.unit-card,.detail-tab,.micro,.diagram,.button{transition:none !important}
     }
 
+
+    /* Mobile 3D controls: one finger rotates, two-finger pinch zooms. */
+    #scene{touch-action:none}
+    @media (max-width:720px){
+      .viewer .hint::after{
+        content:"Drag to rotate · pinch to zoom";
+        font-size:11px;
+        color:#9ea4aa;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1260,10 +1271,60 @@ body.dark .viewer::before{
     document.getElementById('orthoButton').addEventListener('click',()=>{state.orthographic=true;document.getElementById('orthoButton').classList.add('active');document.getElementById('perspectiveButton').classList.remove('active');draw();});
     document.getElementById('wireButton').addEventListener('click',e=>{state.wire=!state.wire;e.currentTarget.classList.toggle('active',state.wire);draw();});
     document.getElementById('resetButton').addEventListener('click',()=>{state.rx=-.38;state.ry=.62;state.zoom=1;draw();});
-    canvas.addEventListener('pointerdown',e=>{state.dragging=true;state.lastX=e.clientX;state.lastY=e.clientY;viewer.classList.add('dragging');canvas.setPointerCapture(e.pointerId);});
-    canvas.addEventListener('pointermove',e=>{if(!state.dragging)return;state.ry+=(e.clientX-state.lastX)*.012;state.rx+=(e.clientY-state.lastY)*.012;state.rx=Math.max(-1.35,Math.min(1.35,state.rx));state.lastX=e.clientX;state.lastY=e.clientY;draw();});
-    function endDrag(){state.dragging=false;viewer.classList.remove('dragging');}canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
-    canvas.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(.62,Math.min(1.45,state.zoom-e.deltaY*.0008));draw();},{passive:false});
+    canvas.addEventListener('pointerdown',e=>{
+      state.dragging=true;state.lastX=e.clientX;state.lastY=e.clientY;
+      viewer.classList.add('dragging');canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener('pointermove',e=>{
+      if(!state.dragging)return;
+      state.ry+=(e.clientX-state.lastX)*.012;
+      state.rx+=(e.clientY-state.lastY)*.012;
+      state.rx=Math.max(-1.35,Math.min(1.35,state.rx));
+      state.lastX=e.clientX;state.lastY=e.clientY;draw();
+    });
+    function endDrag(){state.dragging=false;viewer.classList.remove('dragging');}
+    canvas.addEventListener('pointerup',endDrag);
+    canvas.addEventListener('pointercancel',endDrag);
+
+    // Mobile: pinch with two fingers to zoom the 3D model.
+    const pinchPointers=new Map();
+    let pinchDistance=0;
+    canvas.addEventListener('pointerdown',e=>{
+      if(e.pointerType==='touch'){
+        pinchPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        if(pinchPointers.size===2){
+          const pts=[...pinchPointers.values()];
+          pinchDistance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+          state.dragging=false;
+          viewer.classList.remove('dragging');
+        }
+      }
+    },{passive:true});
+    canvas.addEventListener('pointermove',e=>{
+      if(e.pointerType!=='touch'||!pinchPointers.has(e.pointerId)||pinchPointers.size!==2)return;
+      pinchPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      const pts=[...pinchPointers.values()];
+      const distance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+      if(pinchDistance>0){
+        const scale=distance/pinchDistance;
+        state.zoom=Math.max(.62,Math.min(1.45,state.zoom*scale));
+        pinchDistance=distance;
+        draw();
+      }
+    },{passive:true});
+    function clearPinch(e){
+      pinchPointers.delete(e.pointerId);
+      if(pinchPointers.size<2)pinchDistance=0;
+    }
+    canvas.addEventListener('pointerup',clearPinch);
+    canvas.addEventListener('pointercancel',clearPinch);
+    canvas.addEventListener('pointerleave',clearPinch);
+
+    canvas.addEventListener('wheel',e=>{
+      e.preventDefault();
+      state.zoom=Math.max(.62,Math.min(1.45,state.zoom-e.deltaY*.0008));
+      draw();
+    },{passive:false});
     const menuButton=document.getElementById('menuButton'),navLinks=document.getElementById('navLinks');menuButton.addEventListener('click',()=>{navLinks.classList.toggle('open');menuButton.textContent=navLinks.classList.contains('open')?'×':'☰';});navLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{navLinks.classList.remove('open');menuButton.textContent='☰';}));
 
     /* ===== Smooth glossy interactions ===== */
