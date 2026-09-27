@@ -1229,6 +1229,14 @@ body.dark .viewer::before{
   .projection-stage .quadrant{padding:13px;font-size:8px}
   .projection-stage .quadrant strong{font-size:10px}
 }
+
+/* ===== Full quadrant view + subtle smoky neon controls ===== */
+.projection-stage.quadrants-focus .quadrant{color:rgba(235,248,255,.78)!important;background:rgba(90,180,255,.035)!important;}
+.projection-stage.quadrants-focus .quadrant.active{background:radial-gradient(circle at 50% 50%,rgba(65,190,255,.14),transparent 68%)!important;}
+.projection-stage.quadrants-focus .quadrant::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(110,205,255,.035),transparent 65%);}
+.quadrant-full-btn{border:1px solid rgba(110,205,255,.20);border-radius:999px;padding:9px 14px;color:#cceeff;background:rgba(255,255,255,.035);box-shadow:0 0 0 rgba(80,190,255,0);transition:box-shadow .3s ease,background .3s ease,border-color .3s ease,transform .3s ease;}
+@media (hover:hover) and (pointer:fine){.quadrant-full-btn:hover,.q-btn:hover,.tour-btn:hover{background:rgba(90,190,255,.07);border-color:rgba(110,205,255,.38);box-shadow:0 0 16px rgba(70,190,255,.16),0 8px 24px rgba(0,0,0,.14),inset 0 0 12px rgba(90,200,255,.04);transform:translateY(-1px);}}
+
 </style>
 </head>
 <body>
@@ -1305,6 +1313,7 @@ body.dark .viewer::before{
           <div class="lab-3d-actions">
             <button class="tour-btn" id="quadrantTour">▶ Q1 → Q2 → Q3 → Q4</button>
             <button class="tour-btn lab-reset-3d" id="projectionReset3D" type="button">↺ Reset 3D</button>
+            <button class="quadrant-full-btn" id="quadrantFullView" type="button">◫ Full Quadrants</button>
             <button class="tour-btn" id="observerRotate" type="button">Observer: Front</button>
           </div>
         </div>
@@ -2012,6 +2021,15 @@ if(glowViewer){
           el.classList.add(p.cls);
           el.querySelector('span').textContent=p.label;
           observerRotate.textContent='Observer: '+p.name;
+        });
+      }
+
+      const quadrantFullView=document.getElementById('quadrantFullView');
+      if(quadrantFullView){
+        quadrantFullView.addEventListener('click',()=>{
+          projectionStage.classList.toggle('quadrants-focus');
+          const on=projectionStage.classList.contains('quadrants-focus');
+          quadrantFullView.textContent=on?'◩ Exit Full Quadrants':'◫ Full Quadrants';
         });
       }
 
