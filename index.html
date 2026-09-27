@@ -620,6 +620,98 @@ body.dark .creator-watermark{color:rgba(235,235,240,.5);background:rgba(20,20,24
 body.dark .theme-toggle{color:#f5f5f7;border-color:#3a3a40}
 body.dark .nav-links.open{background:rgba(14,14,17,.97)}
 @media(max-width:720px){.theme-toggle{width:34px;padding:0;justify-content:center}.theme-text{display:none}.creator-watermark{right:9px;bottom:8px}}
+/* ===== Refined dark mode + mouse-tracking glow ===== */
+body.dark{
+  --ink:#f4f4f5; --muted:#a1a1aa; --line:#29292f; --wash:#0b0b0e;
+  --glass:rgba(18,18,22,.82); --glass-line:rgba(255,255,255,.10);
+  background:#070709 !important; color:#f4f4f5;
+}
+body.dark .intro,
+body.dark .cta,
+body.dark .viewer-section,
+body.dark .selector-wrap,
+body.dark .syllabus,
+body.dark .model-detail,
+body.dark .learn,
+body.dark .explain,
+body.dark .projection-lab,
+body.dark .fold-stage,
+body.dark footer{
+  background:#070709 !important;
+  color:#f4f4f5;
+}
+body.dark .learn,
+body.dark .model-detail,
+body.dark .syllabus{
+  background:#0b0b0e !important;
+}
+body.dark .unit-card,
+body.dark .model-card,
+body.dark .detail-tab,
+body.dark .detail-panel,
+body.dark .micro,
+body.dark .jntuh-note,
+body.dark .callout{
+  background:#111115 !important;
+  color:#f4f4f5;
+  border-color:#29292f !important;
+}
+body.dark .unit-card p,
+body.dark .unit-card ul,
+body.dark .model-card small,
+body.dark .detail-panel .lead,
+body.dark .micro p,
+body.dark .learn-head p,
+body.dark .intro-copy,
+body.dark .explain p,
+body.dark .cta p,
+body.dark .selector-label,
+body.dark footer{
+  color:#a1a1aa;
+}
+body.dark .unit-card.active{
+  background:#101923 !important;
+}
+body.dark .diagram{
+  background:#0c1116 !important;
+  border:1px solid #252a30;
+}
+body.dark .diagram-grid{
+  background-image:linear-gradient(#1c2933 1px,transparent 1px),linear-gradient(90deg,#1c2933 1px,transparent 1px) !important;
+}
+body.dark .axis{background:#46677d}
+body.dark .axis-label{color:#76a9ca}
+body.dark .callout{box-shadow:0 8px 22px rgba(0,0,0,.38)}
+body.dark .steps{border-color:#29292f}
+body.dark .step{border-color:#29292f}
+body.dark .footer-inner{color:#a1a1aa}
+
+/* Remove all viewer idle/wave motion. */
+.viewer::after{animation:none !important;background:transparent !important}
+.viewer{
+  --mx:50%;
+  --my:50%;
+  isolation:isolate;
+  transition:transform .18s ease-out;
+}
+.viewer::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(380px circle at var(--mx) var(--my),rgba(91,196,255,.14),rgba(91,196,255,.045) 24%,transparent 58%);
+  opacity:.9;
+  mix-blend-mode:screen;
+  transition:opacity .25s ease;
+}
+.viewer.mouse-away::before{opacity:0}
+body.dark .viewer::before{
+  background:radial-gradient(420px circle at var(--mx) var(--my),rgba(76,190,255,.20),rgba(76,190,255,.055) 25%,transparent 62%);
+}
+
+/* Keep the model itself steady; mouse interaction is the light, not a wave. */
+#scene{transform:none !important}
 </style>
 </head>
 <body>
@@ -1155,6 +1247,32 @@ const savedTheme=localStorage.getItem('eg-theme');
 const preferred=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
 applyTheme(savedTheme||preferred);
 themeToggle?.addEventListener('click',()=>applyTheme(document.body.classList.contains('dark')?'light':'dark'));
+
+
+// ===== Interactive mouse-tracking glow =====
+const glowViewer=document.querySelector('.viewer');
+if(glowViewer){
+  let gx=50, gy=50, tx=50, ty=50, glowActive=false;
+  glowViewer.addEventListener('pointermove',e=>{
+    const r=glowViewer.getBoundingClientRect();
+    tx=((e.clientX-r.left)/r.width)*100;
+    ty=((e.clientY-r.top)/r.height)*100;
+    glowActive=true;
+  },{passive:true});
+  glowViewer.addEventListener('pointerleave',()=>{
+    glowActive=false;
+    tx=50; ty=50;
+  },{passive:true});
+  function glowLoop(){
+    gx+=(tx-gx)*0.16;
+    gy+=(ty-gy)*0.16;
+    glowViewer.style.setProperty('--mx',gx.toFixed(2)+'%');
+    glowViewer.style.setProperty('--my',gy.toFixed(2)+'%');
+    glowViewer.classList.toggle('mouse-away',!glowActive);
+    requestAnimationFrame(glowLoop);
+  }
+  requestAnimationFrame(glowLoop);
+}
 
 </script>
 </body>
