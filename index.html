@@ -1258,12 +1258,850 @@ body.dark .viewer::before{
     .feedback-form small{color:var(--muted);font-size:10px;text-align:center;}
     @media(max-width:720px){.feedback-section{padding:65px 0}.feedback-wrap{grid-template-columns:1fr;gap:28px}.feedback-card{padding:19px}.feedback-row{grid-template-columns:1fr;gap:13px}}
 
+
+    /* Minimal dark feedback panel with cursor-reactive smoky neon */
+    .feedback-section{padding:78px 0;background:#050506;color:#f5f5f7;}
+    .feedback-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:42px;align-items:center;}
+    .feedback-copy h2{margin:0 0 12px;font-size:clamp(36px,4.5vw,58px);line-height:.98;letter-spacing:-.06em;}
+    .feedback-copy p:not(.section-kicker){max-width:430px;margin:0;color:#8e8e96;font-size:16px;}
+    .feedback-card{position:relative;overflow:hidden;padding:25px;border:1px solid rgba(255,255,255,.11);border-radius:22px;background:rgba(14,15,18,.82);box-shadow:0 20px 55px rgba(0,0,0,.35);}
+    .feedback-card::before{content:"";position:absolute;inset:-35%;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--feedback-x,50%) var(--feedback-y,50%),rgba(70,205,255,.18),rgba(105,75,255,.08) 18%,transparent 45%);filter:blur(30px);transition:opacity .35s ease;}
+    .feedback-card:hover::before{opacity:1;}
+    .feedback-form{position:relative;z-index:1;display:grid;gap:13px;}
+    .feedback-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+    .feedback-field label{display:block;margin:0 0 6px;color:#aeb0b8;font-size:11px;font-weight:650;}
+    .feedback-field input,.feedback-field select,.feedback-field textarea{width:100%;border:1px solid rgba(255,255,255,.12);border-radius:11px;background:rgba(255,255,255,.045);color:#f5f5f7;font:inherit;font-size:14px;outline:none;transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;}
+    .feedback-field input,.feedback-field select{height:43px;padding:0 12px;}
+    .feedback-field textarea{min-height:125px;padding:12px;resize:vertical;}
+    .feedback-field input::placeholder,.feedback-field textarea::placeholder{color:#686a72;}
+    .feedback-field select option{background:#101114;color:#fff;}
+    .feedback-field input:focus,.feedback-field select:focus,.feedback-field textarea:focus{border-color:rgba(100,210,255,.55);background:rgba(255,255,255,.06);box-shadow:0 0 0 3px rgba(70,190,255,.08),0 0 22px rgba(70,190,255,.08);}
+    .feedback-submit{width:100%;border:1px solid rgba(100,210,255,.24);border-radius:12px;padding:11px 17px;color:#dff7ff;background:rgba(80,190,255,.08);font-weight:650;box-shadow:0 0 0 rgba(70,190,255,0);transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease,background .3s ease;}
+    .feedback-submit:hover{transform:translateY(-2px);background:rgba(80,190,255,.12);border-color:rgba(100,210,255,.48);box-shadow:0 0 18px rgba(70,190,255,.15),0 12px 28px rgba(0,0,0,.25);}
+    .feedback-status{min-height:17px;color:#75d9ff;font-size:11px;text-align:center;}
+    @media(max-width:720px){.feedback-section{padding:62px 0}.feedback-wrap{grid-template-columns:1fr;gap:25px}.feedback-card{padding:18px}.feedback-row{grid-template-columns:1fr}}
+    body.dark .feedback-section{background:#030304;}
+
 </style>
 </head>
 <body>
   <header class="nav"><nav class="shell nav-inner"><a class="brand" href="#top"><span class="brand-mark"><span>+</span></span>Engineering Graphics</a><div class="nav-actions"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><span class="theme-icon">☾</span><span class="theme-text">Dark</span></button></div><div class="nav-links" id="navLinks"><a href="#syllabus">Course syllabus</a><a href="#explore">3D Lab</a><a href="#projection-lab">Projection Lab</a><a href="#projection-explainer">Learn FV / TV</a><a href="#details">Micro details</a><a href="#learn">Study method</a><a class="nav-button" href="#explore">Start exploring</a></div></nav></header>
   <main id="top">
     <section class="shell intro"><p class="eyebrow">ENGINEERING GRAPHICS · ME203ES</p><h1>Engineering Graphics<br>you can actually see.</h1><p class="intro-copy">A visual study space for <b>engineering students</b>. Rotate the solid, identify every geometric feature, then connect it to orthographic, sectional, development and isometric drawing.</p></section>
+
+    <section class="syllabus reveal" id="syllabus">
+      <div class="shell">
+        <div class="syllabus-head">
+          <p class="section-kicker">Official course map</p>
+          <h2>Five units, organized for visual learning.</h2>
+          <p>The course is organized into five units covering graphics fundamentals, projections, solids, surface development and isometric drawing.</p>
+        </div>
+        <div class="unit-grid">
+          <article class="unit-card reveal delay-1"><span class="unit-no">UNIT I</span><h3>Introduction to Engineering Graphics</h3><p>Build the drawing language before projecting solids.</p><ul><li>Principles & significance</li><li>Geometrical constructions</li><li>Plain & diagonal scales</li><li>Conics + rectangular hyperbola</li><li>Cycloid, epicycloid, hypocycloid</li></ul></article>
+          <article class="unit-card reveal delay-1"><span class="unit-no">UNIT II</span><h3>Orthographic Projections</h3><p>Turn 3D objects into precise 2D views.</p><ul><li>Projection principles & conventions</li><li>Points and lines</li><li>Regular plane figures</li><li>Auxiliary planes</li><li>CAD orthographic views</li></ul></article>
+          <article class="unit-card active"><span class="unit-no">UNIT III</span><h3>Projections of Regular Solids</h3><p>The core of this interactive 3D lab.</p><ul><li>Prism</li><li>Cylinder</li><li>Pyramid</li><li>Cone</li><li>Sections & sectional views</li><li>Auxiliary views + CAD</li></ul></article>
+          <article class="unit-card reveal delay-1"><span class="unit-no">UNIT IV</span><h3>Development of Surfaces</h3><p>Unfold a solid without changing its actual surface.</p><ul><li>Prism development</li><li>Cylinder development</li><li>Pyramid development</li><li>Cone development</li></ul></article>
+          <article class="unit-card reveal delay-1"><span class="unit-no">UNIT V</span><h3>Isometric Projections</h3><p>Represent the object pictorially and reverse the process.</p><ul><li>Isometric principles & scale</li><li>Simple & compound solids</li><li>Non-isometric lines</li><li>Spherical parts</li><li>Isometric ↔ orthographic</li></ul></article>
+        </div>
+        <div class="jntuh-note"><b>Course note:</b> The R25 CSE syllabus specifies conventional drawing for the End Semester Examination and CIE-I, with CIE-II using computer. It also includes CAD treatment of orthographic views, solids/sections and isometric conversion.</div>
+        
+      </div>
+    </section>
+
+    <section class="shell viewer-section reveal" id="explore">
+      <div class="viewer" id="viewer">
+        <canvas id="scene" aria-label="Interactive 3D model viewer. Drag to rotate and scroll to zoom."></canvas>
+        <div class="viewer-top"><div class="model-badge"><i></i><b id="modelBadge">Cube</b> · interactive model</div><div class="hint"><svg viewBox="0 0 24 24"><path d="M9 4 5 8l4 4M15 20l4-4-4-4M5 8h14M19 16H5"/></svg>Drag to rotate <span class="hide-mobile"> · scroll to zoom</span></div></div>
+        <div class="viewer-caption"><h2 id="modelTitle">A solid, not a flat answer.</h2><p id="modelDescription">Start with a cube to see how one object holds a top, front and side view at once.</p></div>
+        <div class="controls" aria-label="3D model controls"><button class="control active" id="perspectiveButton">3D</button><button class="control" id="orthoButton">2D</button><button class="control" id="wireButton">Wire</button><button class="control control-icon" id="resetButton" aria-label="Reset model angle">↺</button></div>
+      </div>
+      <div class="selector-wrap"><p class="selector-label">CHOOSE A SOLID</p><div class="model-selector" id="modelSelector"><button class="model-card active" data-model="cube"><span>01 / basic form</span><b>Cube</b><small>Six square faces</small></button><button class="model-card" data-model="prism"><span>02 / polygonal</span><b>Hexagonal prism</b><small>Parallel bases</small></button><button class="model-card" data-model="pyramid"><span>03 / apex form</span><b>Square pyramid</b><small>Sloping faces</small></button><button class="model-card" data-model="cylinder"><span>04 / curved form</span><b>Cylinder</b><small>Curved surface</small></button><button class="model-card" data-model="cone"><span>05 / apex + curve</span><b>Cone</b><small>Circular base + apex</small></button></div></div>
+    </section>
+
+
+    <section class="projection-lab reveal" id="projection-lab">
+      <div class="shell">
+        <div class="projection-head">
+          <p class="section-kicker">Interactive projection lab</p>
+          <h2>Spot the quadrant.<br>See the projection happen.</h2>
+          <p>Move a point through the four quadrants and watch its front view and top view change around the <b>XY reference line</b>. This is the visual foundation behind projections of points and lines.</p>
+        </div>
+
+        <div class="projection-stage quadrants-focus" id="projectionStage" data-q="1"><div class="projection-3d-note">3D reference space · drag to rotate</div>
+          <div class="plane hp"></div>
+          <div class="plane vp"></div>
+          <div class="plane-label xy">X–Y</div>
+          <div class="plane-label hp">H.P. · horizontal plane</div>
+          <div class="plane-label vp">V.P. · vertical plane</div>
+           <div class="observer observer-front" aria-label="Front view observer"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="7" r="4"/><path d="M9 28v-7c0-4 3-7 7-7s7 3 7 7v7M6 20h6M20 20h6"/></svg><span>FRONT OBSERVER</span><span class="observer-arrow">→</span></div>
+           <div class="observer observer-top" aria-label="Top view observer"><span>TOP OBSERVER</span><span class="observer-arrow">↓</span><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="7" r="4"/><path d="M9 28v-7c0-4 3-7 7-7s7 3 7 7v7M6 20h6M20 20h6"/></svg></div>
+
+          <div class="quadrant q1" data-q="1"><strong>1st QUADRANT</strong>Above H.P. · In front of V.P.</div>
+          <div class="quadrant q2" data-q="2"><strong>2nd QUADRANT</strong>Above H.P. · Behind V.P.</div>
+          <div class="quadrant q3" data-q="3"><strong>3rd QUADRANT</strong>Below H.P. · Behind V.P.</div>
+          <div class="quadrant q4" data-q="4"><strong>4th QUADRANT</strong>Below H.P. · In front of V.P.</div>
+
+          <div class="point" id="projectionPoint" title="Drag me"></div>
+          <div class="projector horizontal" id="frontProjector"></div>
+          <div class="projector vertical" id="topProjector"></div>
+          <div class="view-marker" id="frontMarker">FRONT VIEW<br><b id="frontPos">above XY</b></div>
+          <div class="view-marker" id="topMarker">TOP VIEW<br><b id="topPos">below XY</b></div>
+        </div>
+
+        <div class="lab-ui">
+          <div class="quadrant-buttons" id="quadrantButtons">
+            <button class="q-btn active" data-q="1">Q1</button>
+            <button class="q-btn" data-q="2">Q2</button>
+            <button class="q-btn" data-q="3">Q3</button>
+            <button class="q-btn" data-q="4">Q4</button>
+          </div>
+          <div class="lab-3d-actions">
+            <button class="tour-btn" id="quadrantTour">▶ Q1 → Q2 → Q3 → Q4</button>
+            <button class="tour-btn lab-reset-3d" id="projectionReset3D" type="button">↺ Reset 3D</button>
+            <button class="quadrant-full-btn" id="quadrantFullView" type="button">◫ Full Quadrants</button>
+            <button class="tour-btn" id="observerRotate" type="button">Observer: Front</button>
+          </div>
+        </div>
+
+        <div class="projection-info">
+          <div class="projection-info-card"><span>Current position</span><b id="quadrantName">First quadrant</b><p id="quadrantDescription">Above H.P. and in front of V.P.</p></div>
+          <div class="projection-info-card"><span>Point relation</span><b id="hpRelation">Above H.P.</b><p>Controls front-view height.</p></div>
+          <div class="projection-info-card"><span>V.P. relation</span><b id="vpRelation">In front of V.P.</b><p>Controls top-view side of XY.</p></div>
+          <div class="projection-info-card"><span>Views</span><b id="viewSummary">FV ↑ · TV ↓</b><p>Where the projections land after reference-plane folding.</p></div>
+        </div>
+
+        <div class="challenge">
+          <h3>Perspective challenge</h3>
+          <p>Look at the current point. Which quadrant is it in? Try before using the buttons.</p>
+          <div class="challenge-options">
+            <button class="challenge-option" data-answer="1">Q1 · Above H.P. + in front V.P.</button>
+            <button class="challenge-option" data-answer="2">Q2 · Above H.P. + behind V.P.</button>
+            <button class="challenge-option" data-answer="3">Q3 · Below H.P. + behind V.P.</button>
+            <button class="challenge-option" data-answer="4">Q4 · Below H.P. + in front V.P.</button>
+          </div>
+          <div class="challenge-feedback" id="challengeFeedback">Choose one. The site will explain why.</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="projection-explainer reveal" id="projection-explainer">
+      <div class="shell">
+        <div class="projection-explainer-head">
+          <p class="section-kicker">Learn it visually</p>
+          <h2>Where is the Top View?<br>Where is the Front View?</h2>
+          <p>Don't memorize the answer first. Watch what happens to the <b>Horizontal Plane (H.P.)</b> and <b>Vertical Plane (V.P.)</b>, then fold the H.P. down around the <b>X–Y line</b>.</p>
+        </div>
+
+        <div class="learning-steps" id="learningSteps">
+          <button class="learning-step active" data-step="1"><span>01 · REAL OBJECT</span><b>Point in 3D</b><small>It exists in space.</small></button>
+          <button class="learning-step" data-step="2"><span>02 · PROJECT</span><b>Drop projectors</b><small>Look straight at each plane.</small></button>
+          <button class="learning-step" data-step="3"><span>03 · FOLD</span><b>Rotate H.P.</b><small>Bring both views to paper.</small></button>
+          <button class="learning-step" data-step="4"><span>04 · READ</span><b>Final drawing</b><small>FV above/below XY, TV below/above.</small></button>
+        </div>
+
+        <div class="fold-stage" id="foldStage">
+          <div class="fold-copy">
+            <div class="mini-label" id="foldKicker">Step 01</div>
+            <h3 id="foldTitle">The point is in 3D space.</h3>
+            <p id="foldText">Think of P as a real point floating between the two reference planes. Nothing is “above XY” yet — XY is only the line where H.P. and V.P. meet.</p>
+          </div>
+          <div class="fold-stage-inner">
+            <div class="vp-plane" id="vpPlane"><span class="plane-name">V.P. · vertical plane · front view is projected here</span></div>
+            <div class="hp-plane" id="hpPlane"><span class="plane-name">H.P. · horizontal plane · top view is projected here</span></div>
+            <div class="xy-line"></div><span class="xy-tag">X–Y reference</span>
+            <div class="point3d" id="point3d"></div><span class="point3d-label" id="pointLabel">P</span>
+            <div class="project-line v" id="vProject"></div>
+            <div class="project-line h" id="hProject"></div>
+            <div class="view-dot fv" id="fvDot"></div>
+            <div class="view-dot tv" id="tvDot"></div>
+            <div class="view-label fv" id="fvLabel">FRONT VIEW · FV</div>
+            <div class="view-label tv" id="tvLabel">TOP VIEW · TV</div>
+            <div class="fold-legend">
+              <span class="legend-chip"><b>Blue</b> = V.P. / FV</span>
+              <span class="legend-chip"><b>Green</b> = H.P. / TV</span>
+              <span class="legend-chip"><b>XY</b> = hinge/reference</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fold-controls">
+          <button class="fold-btn primary" id="prevLesson">← Previous</button>
+          <button class="fold-btn primary" id="nextLesson">Next →</button>
+          <button class="fold-btn" id="foldToggle">Fold H.P. down</button>
+          <button class="fold-btn" id="lessonReplay">↻ Replay</button>
+        </div>
+
+        <div class="easy-rule">
+          <article class="easy-card"><span>MEMORY 01</span><b>Front View → V.P.</b><p>Imagine standing in front of the object. The front view is projected onto the vertical plane.</p></article>
+          <article class="easy-card"><span>MEMORY 02</span><b>Top View → H.P.</b><p>Imagine looking down from above. The top view is projected onto the horizontal plane.</p></article>
+          <article class="easy-card"><span>MEMORY 03</span><b>H.P. folds about X–Y</b><p>After folding, the H.P. lies below the X–Y line on the conventional first-angle sheet layout.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="model-detail reveal" id="details">
+      <div class="shell">
+        <div class="detail-head">
+          <p class="section-kicker">Micro anatomy lab</p>
+          <h2>Don't just rotate it. Know exactly what you're looking at.</h2>
+          <p>Select a solid and a concept. The panel explains the geometry, what changes in each view, and what you should reproduce on paper.</p>
+        </div>
+        <div class="detail-layout">
+          <div class="detail-tabs" id="detailTabs">
+            <button class="detail-tab active" data-detail="geometry"><span>01 · anatomy</span><b>Geometry</b></button>
+            <button class="detail-tab" data-detail="orthographic"><span>02 · unit II</span><b>Orthographic</b></button>
+            <button class="detail-tab" data-detail="section"><span>03 · unit III</span><b>Section / cut</b></button>
+            <button class="detail-tab" data-detail="development"><span>04 · unit IV</span><b>Surface development</b></button>
+            <button class="detail-tab" data-detail="isometric"><span>05 · unit V</span><b>Isometric</b></button>
+            <button class="detail-tab" data-detail="exam"><span>06 · exam thinking</span><b>What to draw</b></button>
+          </div>
+          <div class="detail-panel">
+            <h3 id="detailTitle">Geometry</h3>
+            <p class="lead" id="detailLead"></p>
+            <div class="micro-grid" id="microGrid"></div>
+            <div class="exam-strip" id="detailExam"></div>
+            <div class="micro-game" id="microGame">
+              <div class="micro-game-head">
+                <div>
+                  <div class="micro-game-kicker">Micro Anatomy Sprint · +10 XP</div>
+                  <h4 id="microGameTitle">Can you spot the anatomy?</h4>
+                  <p class="micro-game-sub">Three tiny questions. Learn first, then test yourself.</p>
+                </div>
+                <div class="micro-score">
+                  <span class="micro-pill" id="microProgress">1 / 3</span>
+                  <span class="micro-pill" id="microScore">XP 0</span>
+                  <span class="micro-pill" id="microStreak">🔥 0</span>
+                </div>
+              </div>
+              <div class="micro-question">
+                <div class="micro-question-label" id="microQuestionType">Anatomy check</div>
+                <div class="micro-question-text" id="microQuestion"></div>
+                <div class="micro-options" id="microOptions"></div>
+                <div class="micro-feedback" id="microFeedback">Pick an answer. Wrong answers explain the trap.</div>
+                <button class="micro-next" id="microNext" type="button" hidden>Next micro challenge →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="learn reveal" id="learn"><div class="shell"><div class="learn-head"><h2>Explore first. Draw with confidence.</h2><p>This simple flow makes the jump from a 3D object to its Engineering Graphics construction much less mysterious.</p></div><div class="steps"><article class="step reveal delay-1"><span class="step-num">01</span><h3>Turn the solid</h3><p>Use your hands to rotate it. Notice the faces, corners and edges that appear or disappear.</p></article><article class="step reveal delay-1"><span class="step-num">02</span><h3>Switch the view</h3><p>Tap 2D to remove perspective. It helps you see the object as a technical projection, not a photograph.</p></article><article class="step reveal delay-1"><span class="step-num">03</span><h3>Trace the logic</h3><p>Use Wire mode to study every edge, then reproduce the visible and hidden lines in your notebook.</p></article></div></div></section>
+    <section class="shell explain reveal" id="method"><div><p class="eyebrow">Projection thinking</p><h2>One object.<br><span class="blue">Several true views.</span></h2><p>Engineering Graphics is not about copying a shape. It is about placing that shape in relation to the horizontal and vertical planes, then communicating it precisely.</p></div><div class="diagram" aria-label="Simple illustration of horizontal and vertical projection planes"><div class="diagram-grid"></div><i class="axis axis-x"></i><i class="axis axis-y"></i><span class="axis-label label-x">X–Y reference</span><span class="axis-label label-h">H.P.</span><span class="axis-label label-v">V.P.</span><div class="mini-solid"><div></div><div></div><div></div></div><span class="callout callout-one">front view</span><span class="callout callout-two">top view</span></div></section>
+    <section class="feedback-section reveal" id="feedback"><div class="shell"><div class="feedback-wrap"><div class="feedback-copy"><p class="section-kicker">Feedback & suggestions</p><h2>Help make the lab better.</h2><p>Found a mistake, have an idea, or want another Engineering Graphics topic added? Send it straight to the creator.</p><div class="feedback-note"><b>Be specific.</b> Mention the page, question, model, or feature you are talking about so it can be fixed faster.</div></div><div class="feedback-card"><form class="feedback-form" action="https://formsubmit.co/yucantfind@gmail.com" method="POST"><input type="hidden" name="_subject" value="Engineering Graphics Lab — New Feedback"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" value="https://notgonnasaythat.github.io/nope/?feedback=sent"><div class="feedback-row"><div class="feedback-field"><label for="feedbackName">Name</label><input id="feedbackName" name="Name" type="text" placeholder="Your name"></div><div class="feedback-field"><label for="feedbackType">Type</label><select id="feedbackType" name="Type"><option>Suggestion</option><option>Report a problem</option><option>Question</option><option>Other</option></select></div></div><div class="feedback-field"><label for="feedbackEmail">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="feedbackEmail" name="Email" type="email" placeholder="you@example.com"></div><div class="feedback-field"><label for="feedbackMessage">Message</label><textarea id="feedbackMessage" name="Message" required placeholder="Tell us what you want to see or what needs fixing..."></textarea></div><button class="feedback-submit" type="submit">Send Feedback <span>→</span></button><small>Your message is sent securely through the feedback form service.</small></form></div></div></div></section>
+    <section class="cta reveal"><div class="shell"><p class="eyebrow">Make every line intentional.</p><h2>Your next drawing starts with a better view.</h2><p>Choose a solid above, rotate it slowly, and sketch the face that is directly in front of you. Repeat from the top and side.</p><a class="button" href="#explore">Open the 3D viewer <span>→</span></a></div></section>
+  <div class="creator-watermark" aria-label="Created by notgonnasaythat">notgonnasaythat</div>
+  </main>
+  <footer><div class="shell footer-inner"><p>Form — Engineering Graphics study prototype.</p><p>Projection · solids · sections · development · isometric · CAD.</p><p class="watermark-footer">© notgonnasaythat</p></div></footer>
+  <script>
+    const canvas = document.getElementById('scene'), ctx = canvas.getContext('2d'), viewer = document.getElementById('viewer');
+    const modelTitle = document.getElementById('modelTitle'), modelDescription = document.getElementById('modelDescription'), modelBadge = document.getElementById('modelBadge');
+    const state = { model:'cube', rx:-.38, ry:.62, zoom:1, orthographic:false, wire:false, dragging:false, lastX:0, lastY:0 };
+    const details = {
+      cube:{ name:'Cube', title:'A solid, not a flat answer.', text:'Start with a cube to see how one object holds top, front and side information at once.', hue:204 },
+      prism:{ name:'Hexagonal prism', title:'Two bases. Six connecting faces.', text:'Rotate the prism and notice how its two equal, parallel hexagonal bases are connected by six lateral faces.', hue:151 },
+      pyramid:{ name:'Square pyramid', title:'Every edge leads to the apex.', text:'A square pyramid concentrates the projection problem at one apex and four sloping triangular faces.', hue:31 },
+      cylinder:{ name:'Cylinder', title:'Curves become generators.', text:'Inspect the two circular bases and the curved lateral surface; Wire mode reveals the surface generators.', hue:278 },
+      cone:{ name:'Cone', title:'One circular base. One apex.', text:'The cone combines a circular base, an apex and a curved surface whose development becomes a sector.', hue:342 }
+    };
+
+    function makePrism(sides, radius=1.25, height=2.5) { const v=[], f=[], half=height/2; for(const y of [-half,half]) for(let i=0;i<sides;i++){ const a=(Math.PI*2*i/sides)+Math.PI/6; v.push([radius*Math.cos(a),y,radius*Math.sin(a)]); } f.push([...Array(sides).keys()].reverse(), [...Array(sides).keys()].map(i=>i+sides)); for(let i=0;i<sides;i++) f.push([i,(i+1)%sides,(i+1)%sides+sides,i+sides]); return {vertices:v,faces:f}; }
+    function makePyramid() { return {vertices:[[-1.2,-1.1,-1.2],[1.2,-1.1,-1.2],[1.2,-1.1,1.2],[-1.2,-1.1,1.2],[0,1.35,0]],faces:[[0,3,2,1],[0,1,4],[1,2,4],[2,3,4],[3,0,4]]}; }
+    function makeCone(sides=32, radius=1.25, height=2.7) { const v=[], f=[], half=height/2; for(let i=0;i<sides;i++){ const a=(Math.PI*2*i/sides)+Math.PI/2; v.push([radius*Math.cos(a),-half,radius*Math.sin(a)]); } v.push([0,-half,0],[0,half,0]); const apex=sides+1; f.push([...Array(sides).keys()].reverse()); for(let i=0;i<sides;i++) f.push([i,(i+1)%sides,apex]); return {vertices:v,faces:f}; }
+    const models = {cube:makePrism(4,1.25,2.5),prism:makePrism(6),pyramid:makePyramid(),cylinder:makePrism(32,1.22,2.5),cone:makeCone()};
+    function resize() { const r=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2); canvas.width=r.width*dpr; canvas.height=r.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); draw(); }
+    function rotate([x,y,z]) { const cy=Math.cos(state.ry),sy=Math.sin(state.ry),cx=Math.cos(state.rx),sx=Math.sin(state.rx),x1=x*cy-z*sy,z1=x*sy+z*cy; return [x1,y*cx-z1*sx,y*sx+z1*cx]; }
+    function normal(a,b,c) { const u=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],v=[c[0]-a[0],c[1]-a[1],c[2]-a[2]],n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],len=Math.hypot(...n)||1; return n.map(x=>x/len); }
+    function drawGrid(w,h) { const g=ctx.createRadialGradient(w*.5,h*.45,15,w*.5,h*.45,Math.max(w,h)*.66);g.addColorStop(0,'#202127');g.addColorStop(.65,'#0a0a0c');g.addColorStop(1,'#030304');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(255,255,255,.045)';ctx.lineWidth=1;for(let x=w/2%36;x<w;x+=36){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}for(let y=h/2%36;y<h;y+=36){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();} }
+    function draw() {
+      const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;drawGrid(w,h);const mesh=models[state.model],rotated=mesh.vertices.map(rotate),scale=Math.min(w,h)*.255*state.zoom;
+      const points=rotated.map(([x,y,z])=>{const k=state.orthographic?1:5/(5-z*.38);return [w/2+x*scale*k,h*.48-y*scale*k,z];});
+      const ordered=mesh.faces.map(face=>({face,depth:face.reduce((s,i)=>s+rotated[i][2],0)/face.length})).sort((a,b)=>a.depth-b.depth),light=[-.35,-.45,.82],hue=details[state.model].hue;
+      ordered.forEach(({face})=>{const p=face.map(i=>points[i]),n=normal(rotated[face[0]],rotated[face[1]],rotated[face[2]]),bright=Math.max(.08,n[0]*light[0]+n[1]*light[1]+n[2]*light[2]);ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++)ctx.lineTo(p[i][0],p[i][1]);ctx.closePath();if(!state.wire){ctx.fillStyle=`hsla(${hue},${state.model==='pyramid'?88:77}%,${26+bright*48}%,.96)`;ctx.fill();}ctx.strokeStyle=state.wire?'rgba(169,224,255,.95)':'rgba(230,247,255,.46)';ctx.lineWidth=state.wire?1.45:1;ctx.stroke();});
+      ctx.fillStyle=state.wire?'rgba(158,218,255,.8)':'rgba(255,255,255,.34)';ctx.font='11px -apple-system,sans-serif';ctx.fillText(state.wire?'CONSTRUCTION WIREFRAME':state.orthographic?'ORTHOGRAPHIC VIEW':'PERSPECTIVE VIEW',24,h-25);
+    }
+
+    const microContent = {
+      cube:{geometry:["6 square faces","12 straight edges","8 vertices","Opposite faces are parallel and equal"],orthographic:["Front view → square","Top view → square","Side view → square","Hidden edges matter only when an edge is not visible from the selected direction"],section:["A plane parallel to a face gives a square section","A tilted plane can produce a polygonal section","Understand the cutting plane before adding section lines"],development:["Six equal squares unfold into a connected net","Adjacent faces share full edges","Keep true edge lengths while unfolding"],isometric:["Three principal directions are equally spaced in an isometric drawing","Parallel edges remain parallel","Use the isometric scale when the question asks for an isometric projection"],exam:["Identify the solid first","Choose the required reference/view direction","Project visible features before hidden ones","Dimension only after the geometry is correct"]},
+      prism:{geometry:["Two equal, parallel polygonal bases","Six rectangular lateral faces for a hexagonal prism","Lateral edges are parallel","Vertices occur where base edges meet lateral edges"],orthographic:["End view can show the hexagonal base depending on orientation","Front/side views show prism length and projected base edges","Keep corresponding points aligned between views"],section:["A section plane can cut several lateral faces","The section shape depends on plane orientation","Use auxiliary projection when the true section shape is required"],development:["Each lateral face becomes a rectangle in sequence","Base-edge lengths repeat along the development","Add the two hexagonal ends where required"],isometric:["Show the two parallel bases as isometric polygons","Lateral edges stay parallel","Locate non-isometric edges by measured offsets"],exam:["Count base sides before projecting","Track corresponding corners around the prism","Transfer perimeter divisions accurately","Identify every face pierced by a section plane"]},
+      pyramid:{geometry:["One polygonal base","One apex","Four triangular lateral faces for a square pyramid","Sloping edges meet at the apex"],orthographic:["Base corners project to the reference planes","The apex creates converging projected edges","True lengths may not appear in every principal view"],section:["A cutting plane intersects the triangular faces at different heights","The resulting section is generally polygonal","Use auxiliary projection when true shape is required"],development:["A square pyramid unfolds into four connected triangular faces","Each triangle uses true slant geometry","Attach the base along corresponding base edges"],isometric:["Keep the base aligned with isometric directions","Place the apex at the correct height","Connect the apex to required base corners"],exam:["Locate the base first","Project the apex systematically","Distinguish vertical height from slant height","Do not assume an edge is true length because it looks longest"]},
+      cylinder:{geometry:["Two equal circular bases","One curved lateral surface","Axis joins the centers of the bases","Generators are parallel to the cylinder axis"],orthographic:["A principal view can show a rectangle for the curved surface","An end view shows a circle","Generators appear as straight lines in the rectangular projection"],section:["Normal-to-axis cut gives a circular section","A plane parallel to the axis can produce a rectangular-type section","An inclined plane can produce an ellipse in the true section"],development:["Curved surface becomes a rectangle","Rectangle height equals cylinder height","Rectangle length equals circumference πD"],isometric:["Circles are represented as isometric ellipses","The cylinder axis controls orientation","Top and bottom ellipses stay aligned"],exam:["Mark the axis first","Divide the circle if generators are needed","Remember circumference = πD for development","Do not draw a true circle as a circle in standard isometric"]},
+      cone:{geometry:["One circular base","One apex","Curved lateral surface","All generators meet at the apex"],orthographic:["End/top view gives a circle","Principal elevation shows base diameter and apex","Generator appearance depends on orientation"],section:["A section perpendicular to the axis can be circular","An inclined section can produce a conic","The true section depends on cutting-plane angle"],development:["Lateral surface unfolds into a circular sector","Sector radius equals true slant length","Sector arc length equals base circumference"],isometric:["Base circle becomes an isometric ellipse","Locate apex above base center","Connect apex to the extreme points needed to describe the surface"],exam:["Separate vertical height from slant height","Find true slant length before development","Use base circumference for the sector arc","Identify the cutting plane before projecting section points"]}
+    };
+    const detailTitles = {geometry:"Geometry",orthographic:"Orthographic",section:"Section / cut",development:"Surface development",isometric:"Isometric",exam:"What to draw"};
+    function renderMicroDetail(kind='geometry'){
+      const data=microContent[state.model][kind]||[], item=details[state.model];
+      document.getElementById('detailTitle').textContent=detailTitles[kind];
+      document.getElementById('detailLead').textContent=`${item.name}: ${kind==='geometry'?'identify the actual geometric parts before thinking about projection.':kind==='orthographic'?'read the solid from a fixed direction and translate depth, height and width into 2D.':kind==='section'?'imagine a cutting plane passing through the solid, then study the exposed shape.':kind==='development'?'unfold the surface while preserving the true surface distances required by the construction.':kind==='isometric'?'represent the three-dimensional form pictorially using isometric directions and conventions.':'use a practical sequence for turning the object into a clean engineering drawing.'}`;
+      document.getElementById('microGrid').innerHTML=data.map((x,i)=>{const parts=x.split(' → ');return `<article class="micro reveal delay-1"><b>${String(i+1).padStart(2,'0')} ${parts[0]}</b><p>${parts[1]||''}</p></article>`;}).join('');
+      const examText={geometry:"<b>Think first:</b> name the base, faces, edges, vertices and axis before drawing.",orthographic:"<b>Projection check:</b> every point in one view must correspond to the same projector in the related view.",section:"<b>Section check:</b> distinguish the cutting plane, section boundary and remaining visible outlines.",development:"<b>Development check:</b> unfolding changes position, not the actual length of the surface being developed.",isometric:"<b>Isometric check:</b> keep the three principal directions consistent; circles become ellipses.",exam:"<b>Exam habit:</b> construct lightly → verify alignment → darken final outlines → add hidden, section and dimension conventions as required."};
+      document.getElementById('detailExam').innerHTML=examText[kind];
+      if(typeof renderMicroGame==='function') renderMicroGame(true);
+    }
+
+    function setModel(id) { state.model=id;state.rx=-.38;state.ry=.62;state.zoom=1;const item=details[id];modelTitle.textContent=item.title;modelDescription.textContent=item.text;modelBadge.textContent=item.name;document.querySelectorAll('.model-card').forEach(c=>c.classList.toggle('active',c.dataset.model===id));draw();renderMicroGame(true); }
+    document.querySelectorAll('.model-card').forEach(c=>c.addEventListener('click',()=>setModel(c.dataset.model))); document.querySelectorAll('.detail-tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.detail-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');renderMicroDetail(tab.dataset.detail);}));
+    document.getElementById('perspectiveButton').addEventListener('click',()=>{state.orthographic=false;document.getElementById('perspectiveButton').classList.add('active');document.getElementById('orthoButton').classList.remove('active');draw();});
+    document.getElementById('orthoButton').addEventListener('click',()=>{state.orthographic=true;document.getElementById('orthoButton').classList.add('active');document.getElementById('perspectiveButton').classList.remove('active');draw();});
+    document.getElementById('wireButton').addEventListener('click',e=>{state.wire=!state.wire;e.currentTarget.classList.toggle('active',state.wire);draw();});
+    document.getElementById('resetButton').addEventListener('click',()=>{state.rx=-.38;state.ry=.62;state.zoom=1;draw();});
+    canvas.addEventListener('pointerdown',e=>{
+      state.dragging=true;state.lastX=e.clientX;state.lastY=e.clientY;
+      viewer.classList.add('dragging');canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener('pointermove',e=>{
+      if(!state.dragging)return;
+      state.ry+=(e.clientX-state.lastX)*.012;
+      state.rx+=(e.clientY-state.lastY)*.012;
+      state.rx=Math.max(-1.35,Math.min(1.35,state.rx));
+      state.lastX=e.clientX;state.lastY=e.clientY;draw();
+    });
+    function endDrag(){state.dragging=false;viewer.classList.remove('dragging');}
+    canvas.addEventListener('pointerup',endDrag);
+    canvas.addEventListener('pointercancel',endDrag);
+
+    // Mobile: pinch with two fingers to zoom the 3D model.
+    const pinchPointers=new Map();
+    let pinchDistance=0;
+    canvas.addEventListener('pointerdown',e=>{
+      if(e.pointerType==='touch'){
+        pinchPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        if(pinchPointers.size===2){
+          const pts=[...pinchPointers.values()];
+          pinchDistance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+          state.dragging=false;
+          viewer.classList.remove('dragging');
+        }
+      }
+    },{passive:true});
+    canvas.addEventListener('pointermove',e=>{
+      if(e.pointerType!=='touch'||!pinchPointers.has(e.pointerId)||pinchPointers.size!==2)return;
+      pinchPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      const pts=[...pinchPointers.values()];
+      const distance=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+      if(pinchDistance>0){
+        const scale=distance/pinchDistance;
+        state.zoom=Math.max(.62,Math.min(1.45,state.zoom*scale));
+        pinchDistance=distance;
+        draw();
+      }
+    },{passive:true});
+    function clearPinch(e){
+      pinchPointers.delete(e.pointerId);
+      if(pinchPointers.size<2)pinchDistance=0;
+    }
+    canvas.addEventListener('pointerup',clearPinch);
+    canvas.addEventListener('pointercancel',clearPinch);
+    canvas.addEventListener('pointerleave',clearPinch);
+
+    canvas.addEventListener('wheel',e=>{
+      e.preventDefault();
+      state.zoom=Math.max(.62,Math.min(1.45,state.zoom-e.deltaY*.0008));
+      draw();
+    },{passive:false});
+    const navLinks=document.getElementById('navLinks');
+    if(navLinks) navLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{navLinks.classList.remove('open');}));
+
+    /* ===== Smooth glossy interactions ===== */
+    const nav = document.querySelector('.nav');
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },{threshold:.12,rootMargin:'0px 0px -45px 0px'});
+    revealItems.forEach(el=>revealObserver.observe(el));
+
+    function updateNav(){
+      nav.classList.toggle('scrolled',window.scrollY>18);
+    }
+    updateNav();
+    window.addEventListener('scroll',updateNav,{passive:true});
+
+    // Gentle pointer tilt on the main 3D viewer.
+    const viewerMotion = document.getElementById('viewer');
+    if(viewerMotion && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      viewerMotion.addEventListener('pointermove',e=>{
+        if(state.dragging) return;
+        const r=viewerMotion.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width-.5;
+        const y=(e.clientY-r.top)/r.height-.5;
+        viewerMotion.style.transform=`perspective(1200px) rotateX(${(-y*1.35).toFixed(2)}deg) rotateY(${(x*1.35).toFixed(2)}deg) translateY(-3px)`;
+      });
+      viewerMotion.addEventListener('pointerleave',()=>{
+        viewerMotion.style.transform='';
+      });
+    }
+
+    // Make dynamically generated micro cards animate too.
+    const microGrid=document.getElementById('microGrid');
+    const microObserver=new MutationObserver(()=>{
+      microGrid.querySelectorAll('.reveal').forEach(el=>{
+        requestAnimationFrame(()=>el.classList.add('visible'));
+      });
+    });
+    if(microGrid) microObserver.observe(microGrid,{childList:true});
+
+
+    /* ===== Quadrant / projection lab ===== */
+    const projectionStage=document.getElementById('projectionStage');
+    const projectionPoint=document.getElementById('projectionPoint');
+    const frontProjector=document.getElementById('frontProjector');
+    const topProjector=document.getElementById('topProjector');
+    const frontMarker=document.getElementById('frontMarker');
+    const topMarker=document.getElementById('topMarker');
+    const qData={
+      1:{name:'First quadrant',desc:'Above H.P. and in front of V.P.',hp:'Above H.P.',vp:'In front of V.P.',fv:'above XY',tv:'below XY',fvArrow:'↑',tvArrow:'↓'},
+      2:{name:'Second quadrant',desc:'Above H.P. and behind V.P.',hp:'Above H.P.',vp:'Behind V.P.',fv:'above XY',tv:'above XY',fvArrow:'↑',tvArrow:'↑'},
+      3:{name:'Third quadrant',desc:'Below H.P. and behind V.P.',hp:'Below H.P.',vp:'Behind V.P.',fv:'below XY',tv:'above XY',fvArrow:'↓',tvArrow:'↑'},
+      4:{name:'Fourth quadrant',desc:'Below H.P. and in front of V.P.',hp:'Below H.P.',vp:'In front of V.P.',fv:'below XY',tv:'below XY',fvArrow:'↓',tvArrow:'↓'}
+    };
+    let currentQ=1, tourTimer=null;
+
+    function setQuadrant(q,animate=true){
+      currentQ=Number(q); const d=qData[currentQ]; projectionStage.dataset.q=String(currentQ);
+      document.querySelectorAll('.q-btn').forEach(b=>b.classList.toggle('active',Number(b.dataset.q)===currentQ));
+      document.querySelectorAll('.quadrant').forEach(el=>el.classList.toggle('active',Number(el.dataset.q)===currentQ));
+      // Teacher convention: Q1 top-right, Q2 top-left, Q3 bottom-left, Q4 bottom-right.
+      // Right of V.P. = in front; left of V.P. = behind.
+      const x=(currentQ===1||currentQ===4)?70:30;
+      const y=(currentQ===1||currentQ===2)?30:70;
+      projectionPoint.style.left=x+'%'; projectionPoint.style.top=y+'%';
+
+      // Front view projects perpendicular to V.P.: horizontally toward the vertical reference line.
+      frontProjector.style.left=Math.min(x,50)+'%';
+      frontProjector.style.top=y+'%';
+      frontProjector.style.width=Math.abs(x-50)+'%';
+      frontProjector.style.height='1px';
+
+      // Top view projects perpendicular to H.P.: vertically toward the horizontal reference line.
+      topProjector.style.left=x+'%';
+      topProjector.style.top=Math.min(y,50)+'%';
+      topProjector.style.height=Math.abs(y-50)+'%';
+      topProjector.style.width='1px';
+
+      // After folding, FV follows the HP relation and TV follows the VP relation.
+      const fvTop=d.fv==='above XY'?30:70;
+      const tvTop=d.tv==='below XY'?70:30;
+      frontMarker.style.left='calc(50% + 9px)';
+      frontMarker.style.top=fvTop+'%';
+      topMarker.style.left='calc('+x+'% + 9px)';
+      topMarker.style.top=tvTop+'%';
+      frontMarker.classList.add('visible'); topMarker.classList.add('visible');
+
+      document.getElementById('quadrantName').textContent=d.name;
+      document.getElementById('quadrantDescription').textContent=d.desc;
+      document.getElementById('hpRelation').textContent=d.hp;
+      document.getElementById('vpRelation').textContent=d.vp;
+      document.getElementById('viewSummary').textContent=`FV ${d.fvArrow} · TV ${d.tvArrow}`;
+      document.getElementById('frontPos').textContent=d.fv;
+      document.getElementById('topPos').textContent=d.tv;
+
+      document.querySelectorAll('.challenge-option').forEach(b=>b.classList.remove('correct','wrong'));
+      document.getElementById('challengeFeedback').textContent='Choose one. The site will explain why.';
+    }
+
+    document.querySelectorAll('.q-btn').forEach(b=>b.addEventListener('click',()=>{
+      if(tourTimer){clearInterval(tourTimer);tourTimer=null;const tourBtn=document.getElementById('quadrantTour');if(tourBtn)tourBtn.textContent='▶ Q1 → Q2 → Q3 → Q4';}
+      setQuadrant(b.dataset.q);
+    }));
+
+    const quadrantPointDrag=()=>{
+      if(!projectionStage||!projectionPoint)return;
+      let dragging=false,lastX=70,lastY=30;
+      const updatePoint=(x,y,animate=false)=>{
+        x=Math.max(4,Math.min(96,x)); y=Math.max(4,Math.min(96,y));
+        const q=(y<50 ? (x>=50?1:2) : (x<50?3:4));
+        currentQ=q;
+        const d=qData[q];
+        projectionStage.dataset.q=String(q);
+        projectionPoint.style.transition=animate?'':'none';
+        projectionPoint.style.left=x+'%'; projectionPoint.style.top=y+'%';
+        frontProjector.style.left=Math.min(x,50)+'%'; frontProjector.style.top=y+'%'; frontProjector.style.width=Math.abs(x-50)+'%';
+        topProjector.style.left=x+'%'; topProjector.style.top=Math.min(y,50)+'%'; topProjector.style.height=Math.abs(y-50)+'%';
+        const fvTop=d.fv==='above XY'?30:70, tvTop=d.tv==='below XY'?70:30;
+        frontMarker.style.left='calc(50% + 9px)'; frontMarker.style.top=fvTop+'%';
+        topMarker.style.left='calc('+x+'% + 9px)'; topMarker.style.top=tvTop+'%';
+        frontMarker.classList.add('visible'); topMarker.classList.add('visible');
+        document.querySelectorAll('.q-btn').forEach(btn=>btn.classList.toggle('active',Number(btn.dataset.q)===q));
+        document.querySelectorAll('.quadrant').forEach(el=>el.classList.toggle('active',Number(el.dataset.q)===q));
+        document.getElementById('quadrantName').textContent=d.name;
+        document.getElementById('quadrantDescription').textContent=d.desc;
+        document.getElementById('hpRelation').textContent=d.hp;
+        document.getElementById('vpRelation').textContent=d.vp;
+        document.getElementById('viewSummary').textContent=`FV ${d.fvArrow} · TV ${d.tvArrow}`;
+        document.getElementById('frontPos').textContent=d.fv;
+        document.getElementById('topPos').textContent=d.tv;
+      };
+      projectionPoint.addEventListener('pointerdown',e=>{
+        dragging=true; lastX=parseFloat(projectionPoint.style.left)||70; lastY=parseFloat(projectionPoint.style.top)||30;
+        projectionPoint.setPointerCapture(e.pointerId); projectionPoint.style.transition='none'; e.stopPropagation();
+      });
+      projectionPoint.addEventListener('pointermove',e=>{
+        if(!dragging)return;
+        const r=projectionStage.getBoundingClientRect();
+        lastX=((e.clientX-r.left)/r.width)*100; lastY=((e.clientY-r.top)/r.height)*100;
+        updatePoint(lastX,lastY,false);
+      });
+      const stop=()=>{dragging=false;projectionPoint.style.transition='';};
+      projectionPoint.addEventListener('pointerup',stop); projectionPoint.addEventListener('pointercancel',stop);
+    };
+    quadrantPointDrag();
+
+    document.getElementById('quadrantTour').addEventListener('click',()=>{
+      const btn=document.getElementById('quadrantTour');
+      if(tourTimer){clearInterval(tourTimer);tourTimer=null;btn.textContent='▶ Auto tour';return;}
+      let q=1;
+      setQuadrant(1);
+      btn.textContent='■ Q1 → Q2 → Q3 → Q4';
+      tourTimer=setInterval(()=>{
+        q=q+1;
+        if(q>4)q=1;
+        setQuadrant(q);
+      },1800);
+    });
+
+    document.querySelectorAll('.challenge-option').forEach(btn=>btn.addEventListener('click',()=>{
+      const answer=Number(btn.dataset.answer);
+      document.querySelectorAll('.challenge-option').forEach(b=>b.classList.remove('correct','wrong'));
+      if(answer===currentQ){
+        btn.classList.add('correct');
+        document.getElementById('challengeFeedback').textContent=`Correct. ${qData[currentQ].name}: ${qData[currentQ].desc}. Front view is ${qData[currentQ].fv}; top view is ${qData[currentQ].tv}.`;
+      } else {
+        btn.classList.add('wrong');
+        document.querySelector(`.challenge-option[data-answer="${currentQ}"]`).classList.add('correct');
+        document.getElementById('challengeFeedback').textContent=`Not this time. Look at the point relative to H.P. and V.P. — it is in the ${qData[currentQ].name.toLowerCase()}.`;
+      }
+    }));
+    // Restore the first model position: Q1 is the default starting quadrant.
+    setQuadrant(1);
+
+
+    /* ===== 3D plane -> folded drawing lesson ===== */
+    const foldStage=document.getElementById('foldStage');
+    const point3d=document.getElementById('point3d'), pointLabel=document.getElementById('pointLabel');
+    const vpPlane=document.getElementById('vpPlane'), hpPlane=document.getElementById('hpPlane');
+    const vProject=document.getElementById('vProject'), hProject=document.getElementById('hProject');
+    const fvDot=document.getElementById('fvDot'), tvDot=document.getElementById('tvDot');
+    const fvLabel=document.getElementById('fvLabel'), tvLabel=document.getElementById('tvLabel');
+    const foldKicker=document.getElementById('foldKicker'), foldTitle=document.getElementById('foldTitle'), foldText=document.getElementById('foldText');
+
+    const lessonData={
+      1:{title:'The point is in 3D space.',text:'Think of P as a real point floating between the two reference planes. Nothing is “above XY” yet — XY is the line where H.P. and V.P. meet.',point:[47,30],fv:[47,50],tv:[47,50]},
+      2:{title:'Project P to both planes.',text:'Draw one projector perpendicular to V.P. to locate the Front View, and another perpendicular to H.P. to locate the Top View. The two projections are the same point seen from different directions.',point:[47,30],fv:[47,30],tv:[47,50]},
+      3:{title:'Fold H.P. down about X–Y.',text:'This is the key visual step. The H.P. rotates downward around the X–Y hinge. Its Top View comes with it, while the Front View stays on the V.P.',point:[47,30],fv:[47,30],tv:[47,72]},
+      4:{title:'Now read the drawing.',text:'After folding, you have a 2D engineering drawing: Front View is on the V.P.; Top View is on the folded H.P. For a point in the first quadrant, FV is above X–Y and TV is below X–Y.',point:[47,30],fv:[47,34],tv:[47,67]}
+    };
+    let lessonStep=1, hpFolded=false;
+
+    function pos(el,x,y){ el.style.left=x+'%'; el.style.top=y+'%'; }
+    function renderLesson(step,animate=true){
+      lessonStep=step; const d=lessonData[step];
+      document.querySelectorAll('.learning-step').forEach(b=>b.classList.toggle('active',Number(b.dataset.step)===step));
+      foldKicker.textContent=`Step ${String(step).padStart(2,'0')}`;
+      foldTitle.textContent=d.title; foldText.textContent=d.text;
+
+      // Keep planes visible in every step; their visual relationship changes.
+      if(step===1){ hpFolded=false; foldStage.classList.remove('folded'); }
+      if(step===2){ hpFolded=false; foldStage.classList.remove('folded'); }
+      if(step>=3){ hpFolded=true; foldStage.classList.add('folded'); }
+
+      pos(point3d,d.point[0],d.point[1]); pos(pointLabel,d.point[0]+2,d.point[1]-7);
+      pos(fvDot,d.fv[0],d.fv[1]); pos(tvDot,d.tv[0],d.tv[1]);
+      pos(fvLabel,d.fv[0]+2,d.fv[1]-8); pos(tvLabel,d.tv[0]+2,d.tv[1]+3);
+
+      // Projector from P to V.P.
+      vProject.style.left=d.point[0]+'%';
+      vProject.style.top=Math.min(d.point[1],d.fv[1])+'%';
+      vProject.style.height=Math.abs(d.point[1]-d.fv[1])+'%';
+      // Projector from P to H.P.
+      hProject.style.left=Math.min(d.point[0],d.tv[0])+'%';
+      hProject.style.top=d.tv[1]+'%';
+      hProject.style.width=Math.abs(d.point[0]-d.tv[0])+'%';
+
+      const showProjections=step>=2;
+      const showLabels=step>=3;
+      [vProject,hProject,fvDot,tvDot].forEach(el=>el.style.opacity=showProjections?'1':'0');
+      [fvLabel,tvLabel].forEach(el=>el.style.opacity=showLabels?'1':'0');
+
+      document.getElementById('foldToggle').textContent=hpFolded?'Unfold H.P.':'Fold H.P. down';
+    }
+
+    document.querySelectorAll('.learning-step').forEach(b=>b.addEventListener('click',()=>renderLesson(Number(b.dataset.step))));
+    document.getElementById('nextLesson').addEventListener('click',()=>renderLesson(lessonStep===4?1:lessonStep+1));
+    document.getElementById('prevLesson').addEventListener('click',()=>renderLesson(lessonStep===1?4:lessonStep-1));
+    document.getElementById('foldToggle').addEventListener('click',()=>{
+      hpFolded=!hpFolded; foldStage.classList.toggle('folded',hpFolded);
+      document.getElementById('foldToggle').textContent=hpFolded?'Unfold H.P.':'Fold H.P. down';
+      if(hpFolded && lessonStep<3) renderLesson(3);
+    });
+    document.getElementById('lessonReplay').addEventListener('click',()=>{
+      renderLesson(1);
+      setTimeout(()=>renderLesson(2),900);
+      setTimeout(()=>renderLesson(3),1800);
+      setTimeout(()=>renderLesson(4),2900);
+    });
+    renderLesson(1);
+
+    /* ===== Micro Anatomy Sprint ===== */
+    const microQuizBank={
+      cube:[
+        {type:'Face check',q:'A cube has how many square faces?',o:['4','6','8'],a:1,e:'Six faces make the cube closed. Eight is the number of vertices.'},
+        {type:'View detective',q:'With a cube in a simple position, what is a principal view?',o:['A square','A triangle','A circle'],a:0,e:'A cube projects as a square in each principal view when aligned conventionally.'},
+        {type:'Exam trap',q:'Before drawing hidden edges, what should you establish?',o:['The final dimensions','The viewing direction and visible geometry','The title block'],a:1,e:'First lock the view direction and visible geometry; hidden detail comes after.'}
+      ],
+      prism:[
+        {type:'Anatomy check',q:'A hexagonal prism has how many lateral faces?',o:['4','6','8'],a:1,e:'Each of the six sides of the hexagonal base connects to one lateral face.'},
+        {type:'View detective',q:'What stays parallel in a prism?',o:['Lateral edges','Only one base edge','The apex'],a:0,e:'A prism has parallel lateral edges and two equal, parallel bases.'},
+        {type:'Exam trap',q:'When projecting a prism, what should you track around the base?',o:['Corresponding corners','Random visible corners','Only the longest edge'],a:0,e:'Matching each base corner between views keeps the projection aligned.'}
+      ],
+      pyramid:[
+        {type:'Anatomy check',q:'Where do the lateral edges of a square pyramid meet?',o:['At the axis only','At the apex','At the base centre'],a:1,e:'The sloping lateral edges converge at one apex.'},
+        {type:'View detective',q:'What makes the pyramid different from a prism?',o:['It has an apex','It has a base','It has edges'],a:0,e:'The defining feature here is the single apex with triangular lateral faces.'},
+        {type:'Exam trap',q:'Which two heights must you not confuse?',o:['Base and width','Vertical height and slant height','Front and top view'],a:1,e:'Vertical height and slant height are different lengths and are used differently.'}
+      ],
+      cylinder:[
+        {type:'Anatomy check',q:'What are the two ends of a cylinder?',o:['Circular bases','Triangular bases','Apexes'],a:0,e:'A cylinder has two equal circular bases joined by one curved lateral surface.'},
+        {type:'Development',q:'The developed curved surface of a cylinder becomes a…',o:['Triangle','Rectangle','Circle'],a:1,e:'Its height stays the rectangle height and its length equals πD.'},
+        {type:'Isometric trap',q:'In standard isometric drawing, a circular face is shown as a…',o:['Circle','Ellipse','Triangle'],a:1,e:'A circle on an isometric plane is represented by an isometric ellipse.'}
+      ],
+      cone:[
+        {type:'Anatomy check',q:'A cone has one circular base and one…',o:['Apex','Prism','Second base'],a:0,e:'All generators of the cone meet at the apex.'},
+        {type:'Development',q:'The lateral development of a cone is a…',o:['Circular sector','Rectangle','Hexagon'],a:0,e:'The sector radius is the true slant length and its arc equals the base circumference.'},
+        {type:'Exam trap',q:'Which length is used as the sector radius?',o:['Vertical height','True slant length','Base diameter'],a:1,e:'For cone development, use the true slant length—not the vertical height.'}
+      ]
+    };
+    let microRound=0,microXP=0,microStreak=0,microLocked=false;
+    function renderMicroGame(reset=true){
+      if(reset){microRound=0;microXP=0;microStreak=0;}
+      const bank=microQuizBank[state.model]||microQuizBank.cube;
+      const item=bank[microRound];
+      const game=document.getElementById('microGame');
+      document.getElementById('microGameTitle').textContent=details[state.model].name+' · Anatomy Sprint';
+      document.getElementById('microProgress').textContent=Math.min(microRound+1,3)+' / 3';
+      document.getElementById('microScore').textContent='XP '+microXP;
+      document.getElementById('microStreak').textContent='🔥 '+microStreak;
+      const q=document.getElementById('microQuestion');
+      const opts=document.getElementById('microOptions');
+      const feedback=document.getElementById('microFeedback');
+      const next=document.getElementById('microNext');
+      game.classList.remove('complete'); microLocked=false; next.hidden=true;
+      if(!item){
+        game.classList.add('complete');
+        q.textContent='Sprint complete — '+microXP+' XP earned.';
+        opts.innerHTML='';
+        feedback.textContent=microXP===30?'Perfect run. You spotted the anatomy and the exam traps.':'Nice run. Replay after changing concept tabs to lock it in.';
+        next.hidden=false; next.textContent='Replay this sprint ↻';
+        return;
+      }
+      document.getElementById('microQuestionType').textContent=item.type;
+      q.textContent=item.q;
+      opts.innerHTML=item.o.map((option,i)=>'<button class="micro-option" type="button" data-index="'+i+'">'+option+'</button>').join('');
+      feedback.textContent='Pick an answer. Wrong answers explain the trap.';
+      opts.querySelectorAll('.micro-option').forEach(btn=>btn.addEventListener('click',()=>{
+        if(microLocked)return;
+        microLocked=true;
+        const answer=Number(btn.dataset.index);
+        const correct=answer===item.a;
+        btn.classList.add(correct?'correct':'wrong');
+        if(correct){microXP+=10;microStreak+=1;}
+        else{microStreak=0;opts.querySelectorAll('.micro-option')[item.a].classList.add('correct');}
+        feedback.textContent=(correct?'✓ Correct. ':'Not quite. ')+item.e;
+        document.getElementById('microScore').textContent='XP '+microXP;
+        document.getElementById('microStreak').textContent='🔥 '+microStreak;
+        next.hidden=false;
+      }));
+    }
+    document.getElementById('microNext').addEventListener('click',()=>{
+      if(microRound>=3){renderMicroGame(true);return;}
+      microRound+=1;renderMicroGame(false);
+    });
+
+    renderMicroDetail('geometry'); renderMicroGame(true); window.addEventListener('resize',resize);resize();
+  
+// ===== Interactive mouse-tracking glow =====
+const glowViewer=document.querySelector('.viewer');
+if(glowViewer){
+  let gx=50,gy=50,tx=50,ty=50,active=false;
+  glowViewer.addEventListener('pointermove',e=>{
+    const r=glowViewer.getBoundingClientRect();
+    tx=(e.clientX-r.left)/r.width*100;
+    ty=(e.clientY-r.top)/r.height*100;
+    active=true;
+  },{passive:true});
+  glowViewer.addEventListener('pointerleave',()=>{
+    active=false;tx=50;ty=50;
+  },{passive:true});
+  function glowLoop(){
+    gx+=(tx-gx)*.16; gy+=(ty-gy)*.16;
+    glowViewer.style.setProperty('--mx',gx.toFixed(2)+'%');
+    glowViewer.style.setProperty('--my',gy.toFixed(2)+'%');
+    glowViewer.classList.toggle('mouse-away',!active);
+    requestAnimationFrame(glowLoop);
+  }
+  requestAnimationFrame(glowLoop);
+}
+// ===== Light / dark mode =====
+(function(){
+  const button=document.getElementById('themeToggle');
+  if(!button)return;
+  const icon=button.querySelector('.theme-icon');
+  const label=button.querySelector('.theme-text');
+
+  function setTheme(mode){
+    const dark=mode==='dark';
+    document.body.classList.toggle('dark',dark);
+    if(icon)icon.textContent=dark?'☀':'☾';
+    if(label)label.textContent=dark?'Light':'Dark';
+    button.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
+    button.setAttribute('title',dark?'Switch to light mode':'Switch to dark mode');
+    try{localStorage.setItem('eg-theme',mode)}catch(e){}
+  }
+
+  let saved=null;
+  try{saved=localStorage.getItem('eg-theme')}catch(e){}
+  const systemDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(saved || (systemDark?'dark':'light'));
+
+  button.addEventListener('click',function(){
+    setTheme(document.body.classList.contains('dark')?'light':'dark');
+  });
+})();
+
+
+    /* ===== Smooth 3D projection space ===== */
+    const projectionSpace=document.createElement('div');
+    projectionSpace.className='projection-space';
+    projectionSpace.id='projectionSpace';
+    if(projectionStage){
+      const sceneNodes=[...projectionStage.children].filter(el=>!el.classList.contains('projection-3d-note')&&!el.classList.contains('observer')&&!el.classList.contains('quadrant'));
+      sceneNodes.forEach(el=>projectionSpace.appendChild(el));
+      projectionStage.appendChild(projectionSpace);
+
+      let sceneDrag=false,lastSX=0,lastSY=0,rx=-8,ry=-28,scale=1;
+      const clampScale=v=>Math.max(.7,Math.min(1.5,v));
+      const applyScene=()=>{
+        projectionSpace.style.setProperty('--scene-rx',rx+'deg');
+        projectionSpace.style.setProperty('--scene-ry',ry+'deg');
+        projectionSpace.style.setProperty('--scene-scale',scale);
+      };
+      const resetProjection3D=()=>{
+        rx=-8;ry=-28;scale=1;
+        projectionStage.classList.remove('dragging');
+        projectionSpace.classList.remove('is-dragging');
+        applyScene();
+      };
+
+      projectionStage.addEventListener('pointerdown',e=>{
+        if(e.target.closest('.point,.view-marker,.observer,.projection-3d-note,.q-btn,.tour-btn'))return;
+        if(e.pointerType==='touch' && touchPts.size>1)return;
+        sceneDrag=true;lastSX=e.clientX;lastSY=e.clientY;
+        projectionStage.classList.add('dragging');
+        projectionSpace.classList.add('is-dragging');
+        projectionStage.setPointerCapture(e.pointerId);
+      });
+      projectionStage.addEventListener('pointermove',e=>{
+        if(!sceneDrag)return;
+        ry+=(e.clientX-lastSX)*.42;
+        rx-=(e.clientY-lastSY)*.30;
+        lastSX=e.clientX;lastSY=e.clientY;
+        applyScene();
+      });
+      const stopSceneDrag=()=>{
+        sceneDrag=false;
+        projectionStage.classList.remove('dragging');
+        projectionSpace.classList.remove('is-dragging');
+      };
+      projectionStage.addEventListener('pointerup',stopSceneDrag);
+      projectionStage.addEventListener('pointercancel',stopSceneDrag);
+      projectionStage.addEventListener('lostpointercapture',stopSceneDrag);
+
+      projectionStage.addEventListener('wheel',e=>{
+        e.preventDefault();
+        scale=clampScale(scale*Math.exp(-e.deltaY*.0012));
+        applyScene();
+      },{passive:false});
+
+      const touchPts=new Map();
+      let pinchStart=0;
+      projectionStage.addEventListener('pointerdown',e=>{
+        if(e.pointerType!=='touch')return;
+        touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        if(touchPts.size===2){
+          sceneDrag=false;
+          pinchStart=Math.hypot(...(()=>{const a=[...touchPts.values()];return [a[0].x-a[1].x,a[0].y-a[1].y]})());
+        }
+      });
+      projectionStage.addEventListener('pointermove',e=>{
+        if(e.pointerType!=='touch'||!touchPts.has(e.pointerId)||touchPts.size!==2)return;
+        touchPts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        const a=[...touchPts.values()];
+        const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+        if(pinchStart>0){scale=clampScale(scale*(d/pinchStart));pinchStart=d;applyScene();}
+      });
+      const clearTouch=e=>{touchPts.delete(e.pointerId);if(touchPts.size<2)pinchStart=0};
+      projectionStage.addEventListener('pointerup',clearTouch);
+      projectionStage.addEventListener('pointercancel',clearTouch);
+
+      const observerRotate=document.getElementById('observerRotate');
+      const observerFront=document.querySelector('.observer-front');
+      const observerTop=document.querySelector('.observer-top');
+      const observerPositions=[
+        {name:'Front',cls:'observer-front',label:'FRONT OBSERVER'},
+        {name:'Top',cls:'observer-top',label:'TOP OBSERVER'},
+        {name:'Side',cls:'observer-side',label:'SIDE OBSERVER'},
+        {name:'Back',cls:'observer-back',label:'BACK OBSERVER'}
+      ];
+      let observerIndex=0;
+      if(observerRotate){
+        observerRotate.addEventListener('click',()=>{
+          observerIndex=(observerIndex+1)%observerPositions.length;
+          const p=observerPositions[observerIndex];
+          [observerFront,observerTop].forEach(el=>el.classList.remove('observer-front','observer-top','observer-side','observer-back'));
+          const el=observerIndex%2===0?observerFront:observerTop;
+          el.classList.add(p.cls);
+          el.querySelector('span').textContent=p.label;
+          observerRotate.textContent='Observer: '+p.name;
+        });
+      }
+
+      const quadrantFullView=document.getElementById('quadrantFullView');
+      if(quadrantFullView){
+        quadrantFullView.addEventListener('click',()=>{
+          projectionStage.classList.toggle('quadrants-focus');
+          const on=projectionStage.classList.contains('quadrants-focus');
+          quadrantFullView.textContent=on?'◩ Exit Full Quadrants':'◫ Full Quadrants';
+        });
+      }
+
+      const projectionReset3D=document.getElementById('projectionReset3D');
+      if(projectionReset3D) projectionReset3D.addEventListener('click',resetProjection3D);
+      resetProjection3D();
+    }
+
+// ===== Minimal local feedback capture =====
+(function(){
+  const card=document.getElementById('feedbackCard'), form=document.getElementById('feedbackForm'), status=document.getElementById('feedbackStatus');
+  if(!card||!form)return;
+  card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--feedback-x',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');card.style.setProperty('--feedback-y',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');},{passive:true});
+  card.addEventListener('pointerleave',()=>{card.style.setProperty('--feedback-x','50%');card.style.setProperty('--feedback-y','50%');});
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const data={name:form.name.value.trim(),type:form.type.value,message:form.message.value.trim(),time:new Date().toISOString()};
+    if(!data.message)return;
+    const saved=JSON.parse(localStorage.getItem('eg-feedback')||'[]'); saved.push(data); localStorage.setItem('eg-feedback',JSON.stringify(saved));
+    form.reset(); status.textContent='✓ Thanks — your feedback was saved on this device.'; setTimeout(()=>status.textContent='',4000);
+  });
+})();
+
+</script>
+</body>
+</html<section class="feedback-section reveal" id="feedback"><div class="shell"><div class="feedback-wrap"><div class="feedback-copy"><p class="section-kicker">Feedback</p><h2>Got an idea?</h2><p>Tell me what should be fixed, added, or improved in the Engineering Graphics lab.</p></div><div class="feedback-card" id="feedbackCard"><form class="feedback-form" id="feedbackForm"><div class="feedback-row"><div class="feedback-field"><label for="feedbackName">Name</label><input id="feedbackName" name="name" type="text" placeholder="Your name"></div><div class="feedback-field"><label for="feedbackType">Type</label><select id="feedbackType" name="type"><option>Suggestion</option><option>Report a problem</option><option>Question</option><option>Other</option></select></div></div><div class="feedback-field"><label for="feedbackMessage">Message</label><textarea id="feedbackMessage" name="message" required placeholder="Write your message..."></textarea></div><button class="feedback-submit" type="submit">Send <span>→</span></button><div class="feedback-status" id="feedbackStatus" aria-live="polite"></div></form></div></div></div></section>
 
     <section class="syllabus reveal" id="syllabus">
       <div class="shell">
