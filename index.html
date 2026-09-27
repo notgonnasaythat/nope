@@ -1237,6 +1237,12 @@ body.dark .viewer::before{
 .quadrant-full-btn{border:1px solid rgba(110,205,255,.20);border-radius:999px;padding:9px 14px;color:#cceeff;background:rgba(255,255,255,.035);box-shadow:0 0 0 rgba(80,190,255,0);transition:box-shadow .3s ease,background .3s ease,border-color .3s ease,transform .3s ease;}
 @media (hover:hover) and (pointer:fine){.quadrant-full-btn:hover,.q-btn:hover,.tour-btn:hover{background:rgba(90,190,255,.07);border-color:rgba(110,205,255,.38);box-shadow:0 0 16px rgba(70,190,255,.16),0 8px 24px rgba(0,0,0,.14),inset 0 0 12px rgba(90,200,255,.04);transform:translateY(-1px);}}
 
+
+/* ===== Minimal suggestion board ===== */
+.suggestion-board{margin:28px auto 0;max-width:760px;padding:22px;border:1px solid rgba(255,255,255,.10);border-radius:22px;background:rgba(255,255,255,.035);box-shadow:0 18px 55px rgba(0,0,0,.16)}
+.suggestion-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}.suggestion-head h3{margin:0;font-size:18px}.suggestion-head p{margin:4px 0 0;opacity:.58;font-size:13px}
+.suggestion-form{display:flex;gap:9px}.suggestion-form input{flex:1;min-width:0;border:1px solid rgba(255,255,255,.11);border-radius:12px;padding:11px 13px;background:rgba(0,0,0,.16);color:inherit;outline:none}.suggestion-form input:focus{border-color:rgba(110,205,255,.45);box-shadow:0 0 0 3px rgba(80,190,255,.07)}.suggestion-form button{border:1px solid rgba(110,205,255,.20);border-radius:12px;padding:0 15px;background:rgba(255,255,255,.045);color:inherit;cursor:pointer}.suggestion-list{display:grid;gap:7px;margin-top:13px}.suggestion-item{padding:10px 12px;border-radius:11px;background:rgba(255,255,255,.025);font-size:13px;line-height:1.45}.suggestion-empty{font-size:12px;opacity:.42;padding:4px 1px}@media(max-width:620px){.suggestion-head{display:block}.suggestion-form{flex-direction:column}.suggestion-form button{height:42px}}
+body:not(.dark) .suggestion-board{background:rgba(0,0,0,.025);border-color:rgba(0,0,0,.08)}body:not(.dark) .suggestion-form input{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.10)}
 </style>
 </head>
 <body>
@@ -1446,7 +1452,14 @@ body.dark .viewer::before{
     <section class="shell explain reveal" id="method"><div><p class="eyebrow">Projection thinking</p><h2>One object.<br><span class="blue">Several true views.</span></h2><p>Engineering Graphics is not about copying a shape. It is about placing that shape in relation to the horizontal and vertical planes, then communicating it precisely.</p></div><div class="diagram" aria-label="Simple illustration of horizontal and vertical projection planes"><div class="diagram-grid"></div><i class="axis axis-x"></i><i class="axis axis-y"></i><span class="axis-label label-x">X–Y reference</span><span class="axis-label label-h">H.P.</span><span class="axis-label label-v">V.P.</span><div class="mini-solid"><div></div><div></div><div></div></div><span class="callout callout-one">front view</span><span class="callout callout-two">top view</span></div></section>
     <section class="cta reveal"><div class="shell"><p class="eyebrow">Make every line intentional.</p><h2>Your next drawing starts with a better view.</h2><p>Choose a solid above, rotate it slowly, and sketch the face that is directly in front of you. Repeat from the top and side.</p><a class="button" href="#explore">Open the 3D viewer <span>→</span></a></div></section>
   <div class="creator-watermark" aria-label="Created by notgonnasaythat">notgonnasaythat</div>
-  </main>
+  
+    <!-- MINIMAL SUGGESTION BOARD -->
+    <section class="suggestion-board" aria-label="Suggestion board">
+      <div class="suggestion-head"><div><h3>Suggestion board</h3><p>Got an idea for the site? Leave a quick note.</p></div></div>
+      <form class="suggestion-form" id="suggestionForm"><input id="suggestionInput" maxlength="180" placeholder="e.g. Add a line-projection example…" autocomplete="off" required><button type="submit">Post</button></form>
+      <div class="suggestion-list" id="suggestionList"><div class="suggestion-empty" id="suggestionEmpty">No suggestions yet.</div></div>
+    </section>
+</main>
   <footer><div class="shell footer-inner"><p>Form — Engineering Graphics study prototype.</p><p>Projection · solids · sections · development · isometric · CAD.</p><p class="watermark-footer">© notgonnasaythat</p></div></footer>
   <script>
     const canvas = document.getElementById('scene'), ctx = canvas.getContext('2d'), viewer = document.getElementById('viewer');
@@ -2037,6 +2050,16 @@ if(glowViewer){
       if(projectionReset3D) projectionReset3D.addEventListener('click',resetProjection3D);
       resetProjection3D();
     }
+
+// ===== Local suggestion board =====
+(function(){
+  const form=document.getElementById('suggestionForm'), input=document.getElementById('suggestionInput'), list=document.getElementById('suggestionList'), empty=document.getElementById('suggestionEmpty');
+  if(!form||!input||!list)return;
+  let items=[]; try{items=JSON.parse(localStorage.getItem('eg-suggestions')||'[]')}catch(e){items=[]}
+  function render(){list.innerHTML=''; if(!items.length){list.innerHTML='<div class="suggestion-empty">No suggestions yet.</div>';return} items.slice().reverse().forEach(x=>{const el=document.createElement('div');el.className='suggestion-item';el.textContent=x;list.appendChild(el)})}
+  form.addEventListener('submit',e=>{e.preventDefault();const v=input.value.trim();if(!v)return;items.push(v);items=items.slice(-20);try{localStorage.setItem('eg-suggestions',JSON.stringify(items))}catch(e){} input.value='';render()});
+  render();
+})();
 </script>
 </body>
 </html>
