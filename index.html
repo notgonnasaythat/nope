@@ -1122,6 +1122,7 @@ body.dark .viewer::before{
 .projection-stage{perspective:1200px;transform-style:preserve-3d}.projection-stage .plane{transform-style:preserve-3d}.projection-stage .plane.hp{transform:rotateX(62deg)}.projection-stage .plane.vp{transform:rotateY(0deg)}
 .projection-stage .plane.hp{left:15%;top:25%;width:70%;height:58%;border:1px solid rgba(90,215,166,.42);background:rgba(48,190,139,.08)}.projection-stage .plane.vp{left:15%;top:13%;width:70%;height:70%;border:1px solid rgba(105,195,255,.42);background:rgba(54,153,220,.08)}
 .projection-stage .plane.hp{transform:rotateX(62deg) translateZ(-70px);transform-origin:50% 50%}.projection-stage .plane.vp{transform:translateZ(-70px)}
+.projection-3d-note{position:absolute;z-index:10;left:50%;top:6%;transform:translateX(-50%);padding:7px 11px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(7,10,13,.68);color:#b9dff2;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;pointer-events:none}@media(max-width:720px){.projection-3d-note{font-size:8px;top:3%;padding:6px 8px}}
 </style>
 </head>
 <body>
@@ -1167,7 +1168,7 @@ body.dark .viewer::before{
           <p>Move a point through the four quadrants and watch its front view and top view change around the <b>XY reference line</b>. This is the visual foundation behind projections of points and lines.</p>
         </div>
 
-        <div class="projection-stage" id="projectionStage" data-q="1">
+        <div class="projection-stage" id="projectionStage" data-q="1"><div class="projection-3d-note">3D reference space · drag to rotate</div>
           <div class="plane hp"></div>
           <div class="plane vp"></div>
           <div class="plane-label xy">X–Y</div>
