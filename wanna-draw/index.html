@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wanna Draw? · Engineering Graphics Lab</title>
+<meta name="description" content="Interactive Engineering Graphics drawing lab with a virtual drafter, millimetre-accurate constructions and exam mode.">
+<style>
+:root{--ink:#17171a;--muted:#6e6e73;--blue:#0071e3;--line:#d2d2d7;--wash:#f5f5f7;--paper:#fff;--grid:#dcebf5;--tool:#dae4ea;--tool-dark:#aebcc5;--green:#31a46c;--red:#d64d4d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:#fff;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}.shell{width:min(1220px,calc(100% - 40px));margin:auto}
+.nav{position:sticky;top:0;z-index:50;height:58px;background:rgba(255,255,255,.86);backdrop-filter:blur(18px);border-bottom:1px solid rgba(210,210,215,.72)}
+.nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.03em}.mark{width:25px;height:25px;display:grid;place-items:center;background:#17171a;color:#fff;border-radius:7px;transform:rotate(45deg)}.mark span{transform:rotate(-45deg)}
+.nav-links{display:flex;gap:10px;align-items:center}.nav-links a{padding:8px 12px;border-radius:999px;font-size:12px;color:#4d4d53}.nav-links a:hover,.nav-links .active{background:#eef7ff;color:var(--blue)}.nav-links .cta-link{background:var(--blue);color:#fff}
+.hero{padding:78px 0 36px;background:radial-gradient(circle at 50% 0,#e7f5ff,transparent 47%)}.eyebrow{margin:0 0 9px;color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.hero h1{max-width:850px;margin:0 0 16px;font-size:clamp(45px,7vw,82px);line-height:.98;letter-spacing:-.07em}.hero p{max-width:690px;margin:0;color:var(--muted);font-size:20px}.hero b{color:var(--ink)}
+.workspace{padding:28px 0 80px}.layout{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:start}
+.side{position:sticky;top:78px;display:grid;gap:10px}.side-card{padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--paper);box-shadow:0 8px 30px rgba(0,0,0,.04)}.side-card h3{margin:0 0 5px;font-size:16px}.side-card p{margin:0;color:var(--muted);font-size:12px}
+.topic{display:block;width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fff;text-align:left}.topic.active{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);background:#f7fbff}.topic span{display:block;color:var(--blue);font-size:10px;font-weight:800;text-transform:uppercase}.topic b{display:block;margin-top:2px;font-size:13px}.topic small{color:var(--muted)}
+.main-card{overflow:hidden;border:1px solid #d9e5ec;border-radius:24px;background:#f8fcff;box-shadow:0 20px 60px rgba(24,74,108,.10)}
+.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid #d9e5ec;background:rgba(255,255,255,.78);backdrop-filter:blur(12px)}.toolbar-left,.toolbar-right{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#4d4d53;font-size:11px}.pill strong{color:var(--ink)}
+.btn{border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:#fff;color:#303036;font-weight:650;font-size:12px}.btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(0,0,0,.07)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.active{background:#eaf5ff;color:var(--blue);border-color:#9ed4f6}
+.board-wrap{padding:22px;background:linear-gradient(180deg,#eef8ff,#eaf5fb)}.board{position:relative;aspect-ratio:16/10;min-height:550px;overflow:hidden;border:1px solid #cbdbe5;border-radius:18px;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;box-shadow:inset 0 0 40px rgba(60,125,165,.07)}
+.sheet-label{position:absolute;top:18px;left:20px;padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.9);border:1px solid #dfe9ef;color:#557080;font-size:10px;font-weight:800;letter-spacing:.04em}
+.xy{position:absolute;left:10%;right:9%;top:56%;border-top:1.5px dashed #7a95a5;opacity:.75}.xy-label{position:absolute;right:9%;top:calc(56% + 7px);font-size:10px;font-weight:800;color:#607b8b}
+.axis-line{position:absolute;height:2px;background:#33596d;transform-origin:0 50%;opacity:0;transition:opacity .3s}.axis-line.show{opacity:1}
+.construct{position:absolute;stroke:#6d8d9d;stroke-width:1.5;stroke-dasharray:7 6;fill:none;opacity:0;transition:opacity .4s}.construct.show{opacity:.85}
+.final-curve{position:absolute;left:50%;top:55%;width:420px;height:280px;transform:translate(-50%,-50%);border:3px solid #1f5f86;border-radius:50%;opacity:0;transition:opacity .6s;clip-path:inset(0)}.final-curve.show{opacity:1}
+.drafter{position:absolute;left:20%;top:25%;width:310px;height:72px;transform-origin:18px 35px;opacity:0;transition:left .65s cubic-bezier(.22,1,.36,1),top .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1),opacity .3s}.drafter.show{opacity:1}
+.drafter-base{position:absolute;left:20px;top:30px;width:270px;height:9px;background:linear-gradient(#e9eef1,#bcc9d0);border:1px solid #a8b8c2;border-radius:5px;box-shadow:0 3px 8px rgba(30,60,80,.15)}.drafter-head{position:absolute;left:0;top:0;width:55px;height:70px;background:linear-gradient(140deg,#f8fafb,#c6d2d9);border:1px solid #9eafb9;border-radius:10px;box-shadow:0 5px 14px rgba(30,60,80,.18)}.drafter-head:after{content:"";position:absolute;left:25px;top:12px;width:2px;height:45px;background:#708997}.drafter-arm{position:absolute;left:39px;top:34px;width:220px;height:3px;background:#6b7e89;transform-origin:left center}.pencil{position:absolute;left:259px;top:29px;width:14px;height:5px;border-radius:2px;background:#1b1b1d;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.measure{position:absolute;opacity:0;transition:opacity .35s}.measure.show{opacity:1}.measure-line{position:absolute;height:1px;background:#4f7b91}.measure-arrow{position:absolute;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent}.measure-text{position:absolute;padding:2px 6px;border-radius:6px;background:#fff;border:1px solid #cfe1eb;color:#3e6477;font-size:10px;font-weight:800;white-space:nowrap}
+.measure-major{left:28%;top:72%;width:44%;height:24px}.measure-major .measure-line{left:0;right:0;top:10px}.measure-major .l{left:-1px;top:7px;border-right:7px solid #4f7b91}.measure-major .r{right:-1px;top:7px;border-left:7px solid #4f7b91}.measure-major .measure-text{left:50%;top:-5px;transform:translateX(-50%)}
+.measure-minor{left:73%;top:35%;width:24px;height:30%}.measure-minor .measure-line{left:10px;top:0;bottom:0;width:1px;height:auto}.measure-minor .l{left:7px;top:-1px;border-bottom:7px solid #4f7b91}.measure-minor .r{left:7px;bottom:-1px;border-top:7px solid #4f7b91}.measure-minor .measure-text{left:14px;top:50%;transform:translateY(-50%)}
+.step-panel{display:grid;grid-template-columns:1.35fr .65fr;gap:16px;padding:16px;border-top:1px solid #d9e5ec;background:#fff}
+.step-list{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.step-btn{padding:11px 9px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:left}.step-btn.active{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue);background:#f7fbff}.step-btn span{display:block;color:var(--blue);font-size:9px;font-weight:800}.step-btn b{display:block;font-size:11px;margin-top:2px}
+.instructions{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fbfbfc}.instructions .label{color:var(--blue);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.instructions h3{margin:4px 0 6px;font-size:18px}.instructions p{margin:0;color:var(--muted);font-size:12px}.exam-note{margin-top:10px;padding:10px 11px;border-radius:10px;background:#eef7ff;color:#24648f;font-size:11px}
+.mode{display:flex;gap:6px;padding:10px 16px;border-top:1px solid #d9e5ec;background:#f7fbfd}.mode button{flex:0 0 auto}
+.legend{display:flex;gap:12px;flex-wrap:wrap;padding:0 16px 15px;color:#607b8b;font-size:10px}.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:4px}.dot-tool{background:#b7c6ce}.dot-construct{background:#7f9dac}.dot-final{background:#1f5f86}
+.teacher{padding:80px 0}.teacher-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.info{padding:25px;border:1px solid var(--line);border-radius:20px}.info h2{margin:0 0 9px;font-size:clamp(31px,4vw,47px);line-height:1;letter-spacing:-.055em}.info p{margin:0;color:var(--muted);font-size:16px}.info ul{margin:18px 0 0;padding-left:18px;color:#505057;font-size:13px;line-height:1.8}.exam-card{background:#0c1115;color:#fff;border-color:#0c1115}.exam-card p{color:#aab3b9}.exam-card b{color:#fff}
+footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:12px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static;grid-template-columns:repeat(2,1fr)}.side-card{grid-column:1/-1}.step-panel{grid-template-columns:1fr}.teacher-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.shell{width:calc(100% - 22px)}.nav-links a:not(.cta-link){display:none}.nav-links .cta-link{padding:8px 10px}.hero{padding:55px 0 24px}.hero h1{font-size:43px}.hero p{font-size:17px}.workspace{padding-top:17px}.side{grid-template-columns:1fr}.board-wrap{padding:10px}.board{min-height:410px;background-size:18px 18px}.drafter{transform-origin:12px 26px;scale:.72}.final-curve{width:255px;height:180px}.step-list{grid-template-columns:1fr 1fr}.toolbar{align-items:flex-start}.toolbar-right .pill{display:none}.measure-major{left:20%;width:58%}.measure-minor{left:76%}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="shell nav-inner"><a class="brand" href="../index.html"><span class="mark"><span>+</span></span>Engineering Graphics</a><div class="nav-links"><a href="../index.html">Home</a><a class="active" href="#top">Wanna Draw?</a><a href="../index.html#projection-lab">Projection Lab</a><a class="cta-link" href="#drawer">Open Lab</a></div></div></header>
+<main id="top">
+<section class="hero"><div class="shell"><p class="eyebrow">Wanna Draw? · Telangana B.Tech EG/CAD</p><h1>See the <span style="color:var(--blue)">drafter</span> move.<br>Then draw it yourself.</h1><p>Interactive construction practice for engineering graphics. Every step is shown like a real drawing-sheet procedure, with <b>mm dimensions</b>, construction lines and an exam-ready method.</p></div></section>
+<section class="workspace" id="drawer"><div class="shell layout">
+<aside class="side">
+<div class="side-card"><h3>Choose a drawing</h3><p>Start with one construction. More Telangana exam topics can be added here.</p></div>
+<button class="topic active" data-topic="ellipse"><span>01 · Conic</span><b>Ellipse — concentric circles</b><small>Major axis 90 mm · minor axis 60 mm</small></button>
+<button class="topic" data-topic="coming"><span>02 · Coming next</span><b>Parabola</b><small>Same drafter-style animation</small></button>
+<button class="topic" data-topic="coming"><span>03 · Coming next</span><b>Orthographic view</b><small>Projection + dimension sequence</small></button>
+</aside>
+<section class="main-card">
+<div class="toolbar"><div class="toolbar-left"><span class="pill"><strong>Learn mode</strong> · guided</span><span class="pill">Sheet: A3</span><span class="pill">Units: mm</span></div><div class="toolbar-right"><button class="btn" id="speedBtn">1×</button><button class="btn" id="resetBtn">↺ Reset</button><button class="btn primary" id="playBtn">▶ Play</button></div></div>
+<div class="board-wrap"><div class="board" id="board">
+<div class="sheet-label">EG · ELLIPSE / CONCENTRIC CIRCLES · 90 × 60 mm</div><div class="xy"></div><div class="xy-label">REFERENCE / XY</div>
+<div class="axis-line" id="majorAxis" style="left:28%;top:56%;width:44%;transform:rotate(0deg)"></div>
+<div class="axis-line" id="minorAxis" style="left:50%;top:41%;width:30%;transform:rotate(90deg)"></div>
+<svg class="construct" id="circleA" viewBox="0 0 600 400" preserveAspectRatio="none" style="left:0;top:0;width:100%;height:100%"><ellipse cx="300" cy="220" rx="190" ry="125"></ellipse></svg>
+<svg class="construct" id="circleB" viewBox="0 0 600 400" preserveAspectRatio="none" style="left:0;top:0;width:100%;height:100%"><ellipse cx="300" cy="220" rx="122" ry="82"></ellipse></svg>
+<svg class="construct" id="divisions" viewBox="0 0 600 400" preserveAspectRatio="none" style="left:0;top:0;width:100%;height:100%"><path d="M175 130L425 310M175 310L425 130M300 95L300 345M175 220L425 220"></path></svg>
+<div class="final-curve" id="finalCurve"></div>
+<div class="measure measure-major" id="majorMeasure"><div class="measure-line"></div><i class="measure-arrow l"></i><i class="measure-arrow r"></i><span class="measure-text">90 mm — major axis</span></div>
+<div class="measure measure-minor" id="minorMeasure"><div class="measure-line"></div><i class="measure-arrow l"></i><i class="measure-arrow r"></i><span class="measure-text">60 mm — minor axis</span></div>
+<div class="drafter" id="drafter"><div class="drafter-head"></div><div class="drafter-base"></div><div class="drafter-arm"></div><div class="pencil"></div></div>
+</div></div>
+<div class="step-panel"><div><div class="step-list" id="stepList">
+<button class="step-btn active" data-step="1"><span>STEP 01</span><b>Set the axes</b></button>
+<button class="step-btn" data-step="2"><span>STEP 02</span><b>Concentric circles</b></button>
+<button class="step-btn" data-step="3"><span>STEP 03</span><b>Divide & project</b></button>
+<button class="step-btn" data-step="4"><span>STEP 04</span><b>Finish ellipse</b></button>
+</div></div>
+<div class="instructions"><div class="label">How to do it</div><h3 id="stepTitle">Set the major & minor axes</h3><p id="stepText">Place the drafter and draw the 90 mm major axis. Then turn the drafter 90° and draw the 60 mm minor axis through the centre.</p><div class="exam-note" id="examNote">Exam tip: keep construction lines thin and the final curve dark and smooth.</div></div></div>
+<div class="mode"><button class="btn active" id="learnBtn">📖 Learn mode</button><button class="btn" id="examBtn">📝 Exam mode</button><button class="btn" id="slowBtn">🐢 0.5×</button><button class="btn" id="normalBtn">1×</button><button class="btn" id="fastBtn">2×</button></div>
+<div class="legend"><span><i class="dot-tool"></i>drafter / tool</span><span><i class="dot-construct"></i>construction</span><span><i class="dot-final"></i>final drawing</span></div>
+</section></div></section>
+<section class="teacher"><div class="shell teacher-grid">
+<div class="info"><p class="eyebrow">Why this is different</p><h2>A virtual drawing-board, not a slideshow.</h2><p>The drafter is animated first, then the construction appears. Students can pause at any point and copy the exact operation onto their own sheet.</p><ul><li>Movement-based explanation instead of instant finished diagrams</li><li>Millimetre labels for exam practice</li><li>Learn Mode explains why; Exam Mode removes distractions</li><li>Designed for phones as well as laptops</li></ul></div>
+<div class="info exam-card"><p class="eyebrow" style="color:#69c8ff">Exam mode</p><h2>Practice the sequence you will reproduce.</h2><p>Once a drawing is understood, switch to Exam Mode and follow only the construction order, dimensions and final presentation requirements.</p><ul style="color:#c1cad0"><li>Question → Given → Construction steps → Final figure</li><li>One operation at a time</li><li>Restart and replay until the motion is familiar</li></ul></div>
+</div></section>
+</main>
+<footer><div class="shell">Wanna Draw? · Interactive EG/CAD lab</div></footer>
+<script>
+const state={step:1,playing:false,speed:1,exam:false,timer:null};
+const el=id=>document.getElementById(id);
+const drafter=el('drafter'), major=el('majorAxis'), minor=el('minorAxis'), circleA=el('circleA'), circleB=el('circleB'), divisions=el('divisions'), finalCurve=el('finalCurve'), majorMeasure=el('majorMeasure'), minorMeasure=el('minorMeasure');
+const titles={1:'Set the major & minor axes',2:'Build the concentric circles',3:'Divide the circles and project points',4:'Join points with a smooth ellipse'};
+const texts={1:'Place the drafter and draw the 90 mm major axis. Turn the drafter 90° and draw the 60 mm minor axis through the centre.',2:'Using the common centre, draw the outer and inner construction circles that establish the major and minor dimensions.',3:'Divide the circles into equal parts and project corresponding points between the circles. Keep these construction lines light.',4:'Use the projected points as guides and draw one continuous smooth ellipse. Darken only the final curve.'};
+const notes={1:'Exam tip: keep construction lines thin and the final curve dark and smooth.',2:'Exam tip: both construction circles share the same centre as the ellipse.',3:'Exam tip: divide consistently; accuracy of corresponding points matters more than speed.',4:'Exam tip: avoid a segmented-looking curve. Use a smooth, continuous final line.'};
+function setStage(s){
+  state.step=s;
+  document.querySelectorAll('.step-btn').forEach(b=>b.classList.toggle('active',+b.dataset.step===s));
+  el('stepTitle').textContent=titles[s]; el('stepText').textContent=texts[s]; el('examNote').textContent=notes[s];
+  [major,minor,circleA,circleB,divisions,finalCurve,majorMeasure,minorMeasure].forEach(x=>x.classList.remove('show'));
+  drafter.classList.remove('show');
+  if(s===1){drafter.classList.add('show');drafter.style.left='22%';drafter.style.top='48%';drafter.style.transform='rotate(0deg)';major.classList.add('show');majorMeasure.classList.add('show');setTimeout(()=>{drafter.style.left='48%';drafter.style.top='25%';drafter.style.transform='rotate(90deg)'},420);setTimeout(()=>{minor.classList.add('show');minorMeasure.classList.add('show')},650)}
+  if(s===2){drafter.classList.add('show');drafter.style.left='27%';drafter.style.top='30%';drafter.style.transform='rotate(0deg)';major.classList.add('show');minor.classList.add('show');circleA.classList.add('show');circleB.classList.add('show');majorMeasure.classList.add('show');minorMeasure.classList.add('show')}
+  if(s===3){major.classList.add('show');minor.classList.add('show');circleA.classList.add('show');circleB.classList.add('show');divisions.classList.add('show');majorMeasure.classList.add('show');minorMeasure.classList.add('show');drafter.classList.add('show');drafter.style.left='63%';drafter.style.top='28%';drafter.style.transform='rotate(90deg)'}
+  if(s===4){major.classList.add('show');minor.classList.add('show');circleA.classList.add('show');circleB.classList.add('show');divisions.classList.add('show');majorMeasure.classList.add('show');minorMeasure.classList.add('show');finalCurve.classList.add('show');drafter.classList.add('show');drafter.style.left='63%';drafter.style.top='28%';drafter.style.transform='rotate(90deg)'}
+}
+function next(){setStage(state.step<4?state.step+1:1)}
+function play(){state.playing=true;el('playBtn').textContent='⏸ Pause';clearInterval(state.timer);setStage(1);state.timer=setInterval(()=>{if(state.step<4){setStage(state.step+1)}else{clearInterval(state.timer);state.playing=false;el('playBtn').textContent='▶ Play'}},1700/state.speed)}
+el('playBtn').onclick=()=>{if(state.playing){clearInterval(state.timer);state.playing=false;el('playBtn').textContent='▶ Play'}else play()}
+el('resetBtn').onclick=()=>{clearInterval(state.timer);state.playing=false;el('playBtn').textContent='▶ Play';setStage(1)}
+document.querySelectorAll('.step-btn').forEach(b=>b.onclick=()=>setStage(+b.dataset.step));
+document.querySelectorAll('.topic').forEach(t=>t.onclick=()=>{document.querySelectorAll('.topic').forEach(x=>x.classList.remove('active'));t.classList.add('active');if(t.dataset.topic!=='ellipse'){alert('This topic is queued next. The same drafter animation engine will be reused.')}})
+document.querySelectorAll('.mode button').forEach(b=>b.onclick=()=>{if(b===el('slowBtn'))state.speed=.5;if(b===el('normalBtn'))state.speed=1;if(b===el('fastBtn'))state.speed=2;if(b===el('learnBtn')){state.exam=false;el('learnBtn').classList.add('active');el('examBtn').classList.remove('active');el('examNote').textContent=notes[state.step]}if(b===el('examBtn')){state.exam=true;el('examBtn').classList.add('active');el('learnBtn').classList.remove('active');el('examNote').textContent='Exam mode: reproduce only the visible operation, measurement and final-line weight.'}})
+el('speedBtn').onclick=()=>{state.speed=state.speed===1?.5:state.speed===.5?2:1;el('speedBtn').textContent=state.speed+'×'}
+setStage(1);
+</script>
+</body>
+</html>
