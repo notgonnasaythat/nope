@@ -39,13 +39,37 @@ a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}.shell{w
 footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:12px}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.side{position:static;grid-template-columns:repeat(2,1fr)}.side-card{grid-column:1/-1}.step-panel{grid-template-columns:1fr}.teacher-grid{grid-template-columns:1fr}}
 @media(max-width:680px){.shell{width:calc(100% - 22px)}.nav-links a:not(.cta-link){display:none}.nav-links .cta-link{padding:8px 10px}.hero{padding:55px 0 24px}.hero h1{font-size:43px}.hero p{font-size:17px}.workspace{padding-top:17px}.side{grid-template-columns:1fr}.board-wrap{padding:10px}.board{min-height:410px;background-size:18px 18px}.drafter{transform-origin:12px 26px;scale:.72}.final-curve{width:255px;height:180px}.step-list{grid-template-columns:1fr 1fr}.toolbar{align-items:flex-start}.toolbar-right .pill{display:none}.measure-major{left:20%;width:58%}.measure-minor{left:76%}}
+</style><style>
+:root{--bg:#fff;--surface:#fff;--surface2:#f5f7f9;--ink:#17171a;--muted:#6e6e73;--line:#d2d2d7;--blue:#0071e3;--grid:#dcebf5;--tool:#c6d2d9;--construct:#6d8d9d;--final:#1f5f86}
+body.dark{--bg:#08090b;--surface:#111317;--surface2:#151920;--ink:#f4f4f5;--muted:#a1a1aa;--line:#2b3037;--blue:#5bc4ff;--grid:#182630;--tool:#788791;--construct:#91a7b4;--final:#69c8ff}
+body{background:var(--bg);color:var(--ink);transition:background .25s,color .25s}
+.nav{background:color-mix(in srgb,var(--bg) 88%,transparent);border-color:var(--line)}
+.side-card,.topic,.main-card,.toolbar,.step-panel,.instructions,.btn,.pill{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.topic.active,.step-btn.active,.btn.active{background:color-mix(in srgb,var(--blue) 10%,var(--surface));border-color:var(--blue)}
+.hero{background:radial-gradient(circle at 50% 0,color-mix(in srgb,var(--blue) 18%,transparent),transparent 48%)}
+.board-wrap{background:linear-gradient(180deg,var(--surface2),color-mix(in srgb,var(--surface2) 84%,var(--blue)))}
+.board{background-color:var(--surface);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);border-color:var(--line)}
+.sheet-label,.measure-text{background:color-mix(in srgb,var(--surface) 94%,transparent);border-color:var(--line);color:var(--muted)}
+.xy{border-color:var(--muted)}.xy-label{color:var(--muted)}
+.axis-line{background:var(--ink)}.construct{stroke:var(--construct)}.final-curve{border-color:var(--final)}
+.drafter-base{background:linear-gradient(var(--surface),var(--tool));border-color:var(--tool);}.drafter-head{background:linear-gradient(140deg,var(--surface),var(--tool));border-color:var(--tool)}
+.drafter-arm,.drafter-head:after{background:var(--muted)}.pencil{background:var(--ink)}
+.measure-line{background:var(--construct)}.measure-arrow{border-right-color:var(--construct)!important;border-left-color:var(--construct)!important;border-top-color:var(--construct)!important;border-bottom-color:var(--construct)!important}
+.exam-note{background:color-mix(in srgb,var(--blue) 10%,var(--surface));color:var(--blue)}
+.mode{background:var(--surface2);border-color:var(--line)}.legend{color:var(--muted)}
+.info{background:var(--surface);border-color:var(--line)}.exam-card{background:#0c1115;color:#fff}.exam-card p{color:#aab3b9}
+.theme-toggle{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:700}
+.tool-reference{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface2);color:var(--muted);font-size:12px;line-height:1.55}.tool-reference b{color:var(--ink)}
+.drafter .graduations{position:absolute;left:58px;top:25px;width:185px;height:18px;border-top:2px solid var(--tool);background:repeating-linear-gradient(90deg,transparent 0 9px,var(--muted) 9px 10px)}
+.drafter .graduations:after{content:"30 cm scale";position:absolute;left:0;top:22px;color:var(--muted);font-size:8px;font-weight:700}
+@media(max-width:680px){.theme-toggle{padding:8px 9px}.tool-reference{font-size:11px}}
 </style>
 </head>
 <body>
-<header class="nav"><div class="shell nav-inner"><a class="brand" href="../index.html"><span class="mark"><span>+</span></span>Engineering Graphics</a><div class="nav-links"><a href="../index.html">Home</a><a class="active" href="#top">Wanna Draw?</a><a href="../index.html#projection-lab">Projection Lab</a><a class="cta-link" href="#drawer">Open Lab</a></div></div></header>
+<header class="nav"><div class="shell nav-inner"><a class="brand" href="../index.html"><span class="mark"><span>+</span></span>Engineering Graphics</a><div class="nav-links"><a href="../index.html">Home</a><a class="active" href="#top">Wanna Draw?</a><a href="../index.html#projection-lab">Projection Lab</a><a class="cta-link" href="#drawer">Open Lab</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light mode">☾ Dark</button></div></div></header>
 <main id="top">
 <section class="hero"><div class="shell"><p class="eyebrow">Wanna Draw? · Telangana B.Tech EG/CAD</p><h1>See the <span style="color:var(--blue)">drafter</span> move.<br>Then draw it yourself.</h1><p>Interactive construction practice for engineering graphics. Every step is shown like a real drawing-sheet procedure, with <b>mm dimensions</b>, construction lines and an exam-ready method.</p></div></section>
-<section class="workspace" id="drawer"><div class="shell layout">
+<section class="workspace" id="drawer"><div class="shell"><div class="tool-reference"><b>Real drafter reference:</b> this animation follows the common Indian student mini-drafter setup — linked ruler arms, a protractor head and metric scale — rather than a generic straight ruler. Student mini drafters sold in India commonly pair a steel frame/rod with a 30 cm transparent scale. citeturn267524search0turn267524search1</div></div><div class="shell layout">
 <aside class="side">
 <div class="side-card"><h3>Choose a drawing</h3><p>Start with one construction. More Telangana exam topics can be added here.</p></div>
 <button class="topic active" data-topic="ellipse"><span>01 · Conic</span><b>Ellipse — concentric circles</b><small>Major axis 90 mm · minor axis 60 mm</small></button>
@@ -64,7 +88,7 @@ footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-s
 <div class="final-curve" id="finalCurve"></div>
 <div class="measure measure-major" id="majorMeasure"><div class="measure-line"></div><i class="measure-arrow l"></i><i class="measure-arrow r"></i><span class="measure-text">90 mm — major axis</span></div>
 <div class="measure measure-minor" id="minorMeasure"><div class="measure-line"></div><i class="measure-arrow l"></i><i class="measure-arrow r"></i><span class="measure-text">60 mm — minor axis</span></div>
-<div class="drafter" id="drafter"><div class="drafter-head"></div><div class="drafter-base"></div><div class="drafter-arm"></div><div class="pencil"></div></div>
+<div class="drafter" id="drafter"><div class="drafter-head"></div><div class="drafter-base"></div><div class="drafter-arm"></div><div class="graduations"></div><div class="pencil"></div></div>
 </div></div>
 <div class="step-panel"><div><div class="step-list" id="stepList">
 <button class="step-btn active" data-step="1"><span>STEP 01</span><b>Set the axes</b></button>
@@ -84,6 +108,10 @@ footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-s
 <footer><div class="shell">Wanna Draw? · Interactive EG/CAD lab</div></footer>
 <script>
 const state={step:1,playing:false,speed:1,exam:false,timer:null};
+const themeBtn=document.getElementById("themeToggle");
+const savedTheme=localStorage.getItem("eg-theme"); if(savedTheme==="dark"){document.body.classList.add("dark");}
+function syncTheme(){themeBtn.textContent=document.body.classList.contains("dark")?"☀ Light":"☾ Dark";}
+syncTheme(); themeBtn.onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("eg-theme",document.body.classList.contains("dark")?"dark":"light");syncTheme();};
 const el=id=>document.getElementById(id);
 const drafter=el('drafter'), major=el('majorAxis'), minor=el('minorAxis'), circleA=el('circleA'), circleB=el('circleB'), divisions=el('divisions'), finalCurve=el('finalCurve'), majorMeasure=el('majorMeasure'), minorMeasure=el('minorMeasure');
 const titles={1:'Set the major & minor axes',2:'Build the concentric circles',3:'Divide the circles and project points',4:'Join points with a smooth ellipse'};
